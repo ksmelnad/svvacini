@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider     = "prisma-client-js"
+  transactions = false
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  bookId String @unique
+  title  String
+  author String
+
+  chapters Chapter[] @relation("chapters")
+}
+
+model Chapter {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  order Int   
+  chapterId String @unique
+  audio String?
+
+  book   Book   @relation("chapters", fields: [bookId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bookId String @db.ObjectId
+
+  sections   Section[]   @relation("sections")
+  paragraphs Paragraph[] @relation("paragraphs")
+  verses     Verse[]     @relation("verses")
+}
+
+model Section {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  order Int   
+  sectionId String @unique
+
+  chapter   Chapter @relation("sections", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chapterId String  @db.ObjectId
+
+  subsections Subsection[] @relation("subsections")
+  paragraphs  Paragraph[]  @relation("paragraphs")
+  verses      Verse[]      @relation("verses")
+}
+
+model Subsection {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  order        Int    
+  subsectionId String @unique
+
+  section   Section @relation("subsections", fields: [sectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sectionId String  @db.ObjectId
+
+  paragraphs Paragraph[] @relation("paragraphs")
+  verses     Verse[]     @relation("verses")
+}
+
+model Paragraph {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  title String?
+  order Int     
+  line Line
+
+  chapter   Chapter? @relation("paragraphs", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chapterId String?  @db.ObjectId
+
+  section   Section? @relation("paragraphs", fields: [sectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sectionId String?  @db.ObjectId
+
+  subsection   Subsection? @relation("paragraphs", fields: [subsectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subsectionId String?     @db.ObjectId
+}
+
+model Verse {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  order Int   
+  lines Line[] 
+
+  chapter Chapter? @relation("verses", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chapterId String? @db.ObjectId
+
+  section Section? @relation("verses", fields: [sectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sectionId String? @db.ObjectId
+
+  subsection Subsection? @relation("verses", fields: [subsectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subsectionId String? @db.ObjectId
+
+  
+}
+
+model Account {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+type Line {
+  begin String
+  end   String
+  text  String
+}

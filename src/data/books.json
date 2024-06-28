@@ -1,0 +1,64 @@
+[
+  {
+    "book": "ब्रह्मसूत्राणि",
+    "book_id": "BV_UPG_MIM_UMIM_AV_MG_BMS"
+  },
+  {
+    "book": "वेदान्तसारः",
+    "book_id": "BV_UPG_MIM_UMIM_AV_PG_VS"
+  },
+  {
+    "book": "श्रीविष्णुषट्पदी",
+    "book_id": "BV_UPG_MIM_UMIM_AV_IG_SVS"
+  },
+  {
+    "book": "साधनापञ्चकम्",
+    "book_id": "BV_UPG_MIM_UMIM_AV_IG_SP"
+  },
+
+  {
+    "book": "विवेकचूडामणिः",
+    "book_id": "BV_UPG_MIM_UMIM_AV_PG_VC"
+  },
+  {
+    "book": "शतश्लोकी",
+    "book_id": "BV_UPG_MIM_UMIM_AV_PG_SL"
+  },
+
+  {
+    "book": "तर्कसङ्ग्रहः",
+    "book_id": "BV_UPG_NY_NYS_NVNYYK_PG_TKS"
+  },
+  {
+    "book": "दीपिका",
+    "book_id": "BV_UPG_NY_NYS_NVNYYK_PG_TKS_TKSD"
+  },
+  {
+    "book": "योगसूत्रम्",
+    "book_id": "BV_UPG_YOG_YS"
+  },
+  {
+    "book": "रघुवंशम्",
+    "book_id": "BV_SH_SS_PS_RV"
+  },
+  {
+    "book": "मेघदूतम्",
+    "book_id": "BV_SH_SS_PS_MD"
+  },
+  {
+    "book": "आर्यभटीयम्",
+    "book_id": "BV_GN_ARB"
+  },
+  {
+    "book": "सूर्यसिद्धान्तः",
+    "book_id": "BV_GN_SS"
+  },
+  {
+    "book": "खण्डखाद्यकम्",
+    "book_id": "BV_GN_KKY"
+  },
+  {
+    "book": "लीलावतीगणितम्",
+    "book_id": "BV_GN_LVG"
+  }
+]
