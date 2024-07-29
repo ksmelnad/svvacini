@@ -2,6 +2,9 @@
 import Link from "next/link";
 import React from "react";
 import books from "@/data/books.json";
+import BookCover from "../BookCover";
+// import BookCoverImg from "book-cover.svg"
+import Image from "next/image";
 
 interface Book {
   book: string;
@@ -11,21 +14,23 @@ interface Book {
 const Audiobook = () => {
   return (
     <div className="max-w-7xl mx-auto py-10 px-4">
-      <div className="flex flex-wrap -mx-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {books.map((book: Book) => (
           <Link
             key={book.book_id}
             href={`/audiobooks/${book.book_id}`}
-            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 px-4 mb-8"
+            className=" p-2 shadow-md rounded-lg hover:shadow-lg flex flex-col gap-2 items-center"
           >
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-              <div className="w-full h-48 object-cover object-center bg-orange-300" />
-              <div className="p-4">
-                <p className="uppercase tracking-wide text-sm font-bold text-gray-700">
-                  {book.book}
-                </p>
-              </div>
-            </div>
+            <Image
+              src="/book-cover.svg"
+              alt="book-cover"
+              height={500}
+              width={200}
+            />
+
+            <p className="uppercase tracking-wide font-bold text-gray-600">
+              {book.book}
+            </p>
           </Link>
         ))}
       </div>

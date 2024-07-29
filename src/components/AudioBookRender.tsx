@@ -98,11 +98,13 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
         </div>
 
         <div className="sticky bottom-0">
-          <AudioPlayerComp
-            src={bookData.chapters[currentChapterIndex].audio || ""}
-            selectedTextTime={selectedTextTime}
-            setCurrentTime={setCurrentTime}
-          />
+          {bookData.chapters[currentChapterIndex].audio && (
+            <AudioPlayerComp
+              src={bookData.chapters[currentChapterIndex].audio || ""}
+              selectedTextTime={selectedTextTime}
+              setCurrentTime={setCurrentTime}
+            />
+          )}
         </div>
       </div>
     </div>

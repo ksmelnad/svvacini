@@ -6,6 +6,16 @@ import React, { useEffect, useState } from "react";
 import Sanscript from "@/utils/sanscript";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectGroup,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Docs {
   name: string;
@@ -258,12 +268,7 @@ function Search() {
     return <div dangerouslySetInnerHTML={{ __html: highlighted }} />;
   }
 
-  const handleScriptChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ): void => {
-    event.preventDefault();
-    setScript(event.target.value);
-  };
+  
 
   const handleSanskriptChange = (value: string): void => {
     const output = Sanscript.t(value, script, "devanagari");
@@ -354,11 +359,7 @@ function Search() {
                         focus:border-gray-500 
                       focus:bg-white 
                       focus:outline-none"
-                      // style={{
-                      //   padding: "0.5rem",
-                      //   border: "1px solid #ccc",
-                      //   borderRadius: "5px",
-                      // }}
+                      
                       onChange={(e) => setSort(e.target.value)}
                       value={sort}
                     >
@@ -420,8 +421,8 @@ function Search() {
           </button>
         </div> */}
       </div>
-      <div className="border p-4">
-        <form onSubmit={onSubmitHandler}>
+      <div className="border p-4 rounded">
+        <form onSubmit={onSubmitHandler} className="flex flex-col gap-2">
           {isAiBharat ? (
             // <IndicTransliterate
             //   className={styles.searchinput}
@@ -436,77 +437,43 @@ function Search() {
           ) : (
             <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
               <div className="md:col-span-3">
-                <label
-                  className="mb-1 
-                    block
-                    py-2 
-                  text-xs 
-                    font-semibold 
-                    tracking-wide text-gray-700"
-                  htmlFor="input-query"
-                >
-                  QUERY
-                </label>
-                <input
+                <Label htmlFor="input-query">Query</Label>
+                <Input
                   type="text"
                   id="input-query"
-                  className="form-input block w-full 
-                  rounded
-                  border border-gray-200 bg-gray-200
-                  text-sm leading-tight 
-                    text-gray-700 
-                    focus:border-gray-500 
-                  focus:bg-white 
-                  focus:outline-none"
-                  // placeholder="ब्रह्म"
                   onChange={(e) => handleSanskriptChange(e.target.value)}
                 />
 
-                <div className="my-2 rounded bg-gray-50 px-3 py-1 text-lg">
-                  {queryString ? (
-                    queryString
-                  ) : (
-                    <span className="text-white">&nbsp;</span>
-                  )}
+                {queryString && (
+                  <div className="my-2 rounded bg-gray-50 px-3 py-2 text-lg">
+                  {queryString }
                 </div>
+                )}
               </div>
-              <div className="col-span-1">
-                <div className="md:flex md:flex-col ">
-                  <label
-                    className="mb-1 block 
-                    py-2 
-                    text-xs
-                    font-semibold 
-                    uppercase 
-                    tracking-wide text-gray-700"
-                    htmlFor="select-script"
-                  >
-                    Transiteration
-                  </label>
-                  <select
-                    id="select-script"
-                    onChange={handleScriptChange}
-                    className="form-select block  
-                  rounded border border-gray-200
-                  bg-gray-200 text-sm 
-                  leading-tight
-                    text-gray-700 
-                    focus:border-gray-500 
-                  focus:bg-white  
-                  focus:outline-none"
-                  >
-                    {Object.keys(scripts).map((key) => (
-                      <option key={key} value={key}>
+              <div className="md:col-span-1">
+                <div className="">
+                  <Label htmlFor="select-script">Transiteration</Label>
+                  
+                  <Select onValueChange={(e) => setScript(e)} value={script}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent id="select-script">
+                      <SelectGroup>
+                        {Object.keys(scripts).map((key) => (
+                        <SelectItem key={key} value={key}>
                         {scripts[key]}
-                      </option>
-                    ))}
-                  </select>
+                        </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
           )}
 
-          <Button type="submit" disabled={!queryString}>
+          <Button type="submit" disabled={!queryString} className="max-w-fit">
             Search
           </Button>
         </form>

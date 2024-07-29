@@ -53,10 +53,6 @@ async function Navbar() {
 
   const session = await auth();
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
   return (
     <header className="bg-[#efe7d6] shadow-sm sticky top-0 left-0 right-0">
       <nav className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
@@ -80,7 +76,7 @@ async function Navbar() {
         <div className="flex gap-4">
           {session?.user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Avatar>
                   <AvatarImage src={session.user.image!} />
                   {/* <AvatarFallback>CN</AvatarFallback> */}
@@ -108,7 +104,7 @@ async function Navbar() {
             </Link>
           )}
           <DropdownMenu>
-            <DropdownMenuTrigger className="md:hidden">
+            <DropdownMenuTrigger className="md:hidden" asChild>
               <Button variant="outline" size="icon">
                 <Menu />
               </Button>
