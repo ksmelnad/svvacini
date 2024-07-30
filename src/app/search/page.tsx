@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Sanscript from "@/utils/sanscript";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -15,7 +15,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface Docs {
   name: string;
@@ -153,7 +153,7 @@ function Search() {
     docSet.clear();
 
     try {
-      const res = await fetch("/api/solr", {
+      const res = await fetch("/api/solr-direct", {
         method: "POST",
         body: JSON.stringify({
           queryString,
@@ -161,7 +161,7 @@ function Search() {
         }),
       });
 
-      console.log("Res", res);
+      // console.log("Res", res);
 
       if (!res.ok) {
         console.log("Error fetching data from Solr");
@@ -174,22 +174,45 @@ function Search() {
       try {
         const { response } = data;
         const { docs } = response;
+        // console.log("Response docs: ", response);
 
         setNumFound(response.numFound);
 
+        // docs.map((doc: any) => {
+        //   if (!docSet.has(doc.name[0])) {
+        //     docSet.add("सर्वम्");
+        //     docSet.add(doc.name[0]);
+        //     setDocSet(docSet);
+        //   }
+        // });
+
+        //Temp fix ???
+
         docs.map((doc: any) => {
-          if (!docSet.has(doc.name[0])) {
+          if (!docSet.has(doc.book_title[0])) {
             docSet.add("सर्वम्");
-            docSet.add(doc.name[0]);
+            docSet.add(doc.book_title[0]);
             setDocSet(docSet);
           }
         });
-        setDocs(docs);
+
+        const transformedDocs = docs.map((doc: any) => ({
+          name_id: doc.book_id,
+          name: doc.book_title,
+          word: doc.line[0],
+          word_id: doc.line_id,
+          id: doc.id,
+          _version_: doc._version_,
+        }));
+
+        setDocs(transformedDocs);
+
+        // setDocs(docs);
         setIsSarvam(true);
-        setFilteredDocs(docs);
+        setFilteredDocs(transformedDocs);
         setIsLoading(false);
       } catch (error) {
-        console.log("Error logging docs");
+        console.log("Error logging docs", error);
       }
     } catch (error) {
       console.log("Error message:", error);
@@ -202,6 +225,7 @@ function Search() {
       if (isSarvam) {
         setSort("relevance");
         setSortedDocs(filteredDocs);
+        // console.log("Sorted Docs", filteredDocs);
         return;
       }
       if (sort === "order") {
@@ -239,6 +263,7 @@ function Search() {
   }, [selectedText, docs]);
 
   const refNumber = (word_id: string) => {
+    // console.log(word_id);
     if (word_id.includes("SC1")) {
       const regex = /SC1:(\d+)/;
       const match = word_id.match(regex);
@@ -267,8 +292,6 @@ function Search() {
     );
     return <div dangerouslySetInnerHTML={{ __html: highlighted }} />;
   }
-
-  
 
   const handleSanskriptChange = (value: string): void => {
     const output = Sanscript.t(value, script, "devanagari");
@@ -359,7 +382,6 @@ function Search() {
                         focus:border-gray-500 
                       focus:bg-white 
                       focus:outline-none"
-                      
                       onChange={(e) => setSort(e.target.value)}
                       value={sort}
                     >
@@ -446,14 +468,14 @@ function Search() {
 
                 {queryString && (
                   <div className="my-2 rounded bg-gray-50 px-3 py-2 text-lg">
-                  {queryString }
-                </div>
+                    {queryString}
+                  </div>
                 )}
               </div>
               <div className="md:col-span-1">
                 <div className="">
                   <Label htmlFor="select-script">Transiteration</Label>
-                  
+
                   <Select onValueChange={(e) => setScript(e)} value={script}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue />
@@ -461,9 +483,9 @@ function Search() {
                     <SelectContent id="select-script">
                       <SelectGroup>
                         {Object.keys(scripts).map((key) => (
-                        <SelectItem key={key} value={key}>
-                        {scripts[key]}
-                        </SelectItem>
+                          <SelectItem key={key} value={key}>
+                            {scripts[key]}
+                          </SelectItem>
                         ))}
                       </SelectGroup>
                     </SelectContent>
