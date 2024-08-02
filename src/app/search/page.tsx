@@ -170,6 +170,7 @@ function Search() {
       }
 
       const data = await res.json();
+      // console.log("Res data", data);
 
       try {
         const { response } = data;
@@ -199,7 +200,7 @@ function Search() {
         const transformedDocs = docs.map((doc: any) => ({
           name_id: doc.book_id,
           name: doc.book_title,
-          word: doc.line[0],
+          word: doc.line,
           word_id: doc.line_id,
           id: doc.id,
           _version_: doc._version_,

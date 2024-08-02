@@ -6,12 +6,13 @@ export async function POST(request: Request) {
 
   try {
     const { queryString, texts } = await request.json();
+    console.log(queryString, texts);
 
     // Encode the Devanagari query string for URL safety
     const encodedQueryString = encodeURIComponent(queryString);
 
     const response = await fetch(
-      `${solrUrl}select?q.op=OR&df=line&q=${encodedQueryString}&fq=book_title:${texts}`
+      `${solrUrl}select?q.op=OR&df=line&q=${encodedQueryString}&fq=book_title:${texts}&rows=100`
     );
     if (!response.ok) {
       throw new Error("Network response was not ok");
