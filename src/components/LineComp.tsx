@@ -36,22 +36,20 @@ const LineComp = ({
       id={lineId}
       key={index}
       ref={lineRef}
-      className={`cursor-pointer text-yellow-300 ${
-        isActive ? "text-xl text-red-700" : ""
-      }`}
+      className={`cursor-pointer ${isActive ? "text-xl text-red-700" : ""}`}
       onClick={() => setSelectedTextTime(parseFloat(line.begin))}
     >
       {line.text.includes("\n") ? (
         line.text.split("\n").map((text: string, index: number) => {
           return (
-            <span className="text-green-300" key={index}>
+            <span className="" key={index}>
               {text}
               <br />
             </span>
           );
         })
       ) : (
-        <span className="text-green-700">{line.text}</span>
+        <span className="">{line.text}</span>
       )}
     </p>
   );
