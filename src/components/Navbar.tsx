@@ -30,46 +30,49 @@ function SignOut() {
 async function Navbar() {
   const navitems = [
     {
-      title: "About",
-      url: "/about",
-    },
-    {
-      title: "Audio Books",
+      title: "Dhvanipustakāni",
       url: "/audiobooks",
     },
+
     {
-      title: "TTS",
-      url: "/tts",
-    },
-    {
-      title: "ASR",
-      url: "/asr",
-    },
-    {
-      title: "Search",
+      title: "Anveṣhiṇī",
       url: "/search",
+    },
+    {
+      title: "Saṃvādinī",
+      url: "/samvadini",
+    },
+    {
+      title: "Swam",
+      url: "/about",
     },
   ];
 
   const session = await auth();
 
   return (
-    <header className="bg-[#efe7d6] shadow-sm sticky top-0 left-0 right-0">
-      <nav className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
+    <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 text-gray-200 ">
+      <nav className="max-w-5xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
         <Link href="/">
           <h3
-            className={`text-2xl font-bold tracking-wide text-red-700 ${shobhikaBold.className} `}
+            className={`text-2xl font-bold tracking-wide  ${shobhikaBold.className} `}
           >
             संस्कृतवाङ्मयवाचिनी
           </h3>
         </Link>
 
-        <ul className="hidden md:flex gap-8 px-6 font-serif text-sm tracking-wide text-gray-600 ">
+        <ul className="hidden md:flex gap-8 px-6 font-serif text-sm tracking-wide ">
           {navitems.map((item, index) => (
             <li key={index}>
-              <Link className="hover:text-gray-900" href={item.url}>
-                {item.title}
-              </Link>
+              <Button
+                asChild
+                variant="link"
+                className="font-serif text-sm tracking-wide text-gray-200 "
+              >
+                <Link className="" href={item.url}>
+                  {item.title}
+                </Link>
+              </Button>
             </li>
           ))}
         </ul>
@@ -93,15 +96,13 @@ async function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Link href="/api/auth/signin">
-              <Button
-                variant="link"
-                className="font-serif text-sm tracking-wide text-gray-600"
-              >
-                {" "}
-                Sign in{" "}
-              </Button>
-            </Link>
+            <Button
+              asChild
+              variant="link"
+              className="font-serif text-sm tracking-wide text-gray-200 "
+            >
+              <Link href="/api/auth/signin">Sign in</Link>
+            </Button>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger className="md:hidden" asChild>

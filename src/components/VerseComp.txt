@@ -2,23 +2,21 @@
 import { Line, Paragraph, Verse } from "@prisma/client";
 import React, { useEffect, useRef } from "react";
 
-interface LineProps {
-  lineId: string;
-  line: Line;
+interface VerseProps {
+  verse: Verse;
   index: number;
   currentTime: number;
   setSelectedTextTime: React.Dispatch<React.SetStateAction<number>>;
   lineRef: React.RefObject<any>;
 }
 
-const LineComp = ({
-  lineId,
-  line,
+const VerseComp = ({
+  verse,
   index,
   currentTime,
   setSelectedTextTime,
   lineRef,
-}: LineProps) => {
+}: VerseProps) => {
   const isActive =
     currentTime >= parseFloat(line.begin) && currentTime < parseFloat(line.end);
 
@@ -33,28 +31,24 @@ const LineComp = ({
 
   return (
     <p
-      id={lineId}
+      // id={line.id}
       key={index}
       ref={lineRef}
-      className={`cursor-pointer text-yellow-300 ${
-        isActive ? "text-xl text-red-700" : ""
-      }`}
+      className={`cursor-pointer ${isActive ? "text-xl text-red-700" : ""}`}
       onClick={() => setSelectedTextTime(parseFloat(line.begin))}
     >
-      {line.text.includes("\n") ? (
-        line.text.split("\n").map((text: string, index: number) => {
-          return (
-            <span className="text-green-300" key={index}>
-              {text}
-              <br />
-            </span>
-          );
-        })
-      ) : (
-        <span className="text-green-700">{line.text}</span>
-      )}
+      {line.text.includes("\n")
+        ? line.text.split("\n").map((text: string, index: number) => {
+            return (
+              <span key={index}>
+                {text}
+                <br />
+              </span>
+            );
+          })
+        : line.text}
     </p>
   );
 };
 
-export default LineComp;
+export default VerseComp;

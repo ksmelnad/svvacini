@@ -2,15 +2,27 @@ import prisma from "@/utils/prismadb";
 import books from "@/data/books.json";
 import booksMeta from "@/data/books-meta/booksMeta.json";
 import AudioBookRender from "@/components/AudioBookRender";
+import { Book, Chapter, Paragraph, Section, Verse } from "@prisma/client";
 
 // import {Book } from "@prisma/client"
 
-interface Book {
+interface StaticBook {
   book: string;
   book_id: string;
 }
 
-const getBook = async (slug: string) => {
+type BookWithRelations = Book & {
+  chapters: (Chapter & {
+    paragraphs: Paragraph[];
+    verses: Verse[];
+    sections: (Section & {
+      paragraphs: Paragraph[];
+      verses: Verse[];
+    })[];
+  })[];
+};
+
+const getBook = async (slug: string): Promise<BookWithRelations | null> => {
   try {
     const bookData = await prisma.book.findFirst({
       where: {
@@ -54,9 +66,10 @@ const getBook = async (slug: string) => {
         },
       },
     });
-    return bookData;
+    return bookData as BookWithRelations | null;
   } catch (error) {
     console.error(error);
+    return null;
   }
 };
 
@@ -67,7 +80,7 @@ const getBook = async (slug: string) => {
 export async function generateStaticParams() {
   // Import the Book type from the correct module
 
-  return books.map((book: Book) => ({
+  return books.map((book: StaticBook) => ({
     slug: book.book_id,
   }));
 }

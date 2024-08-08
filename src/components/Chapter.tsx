@@ -1,24 +1,48 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { shobhika, shobhikaBold } from "@/utils/shobhika";
-import { Line, Paragraph } from "@prisma/client";
+import { Line, Paragraph, Verse } from "@prisma/client";
 import ParagraphComp from "./ParagraphComp";
 import LineComp from "./LineComp";
+import { useRouter } from "next/navigation";
 
 const Chapter = ({
   chapter,
   currentTime,
   setSelectedTextTime,
+  scrollToLineId,
 }: {
   chapter: any;
   currentTime: number;
   setSelectedTextTime: React.Dispatch<React.SetStateAction<number>>;
+  scrollToLineId: string | null;
 }) => {
   const paragraphRefs: { [key: string]: React.RefObject<any> } = useRef(
     {}
   ).current;
 
   const verseRefs: { [key: string]: React.RefObject<any> } = useRef({}).current;
+
+  const router = useRouter();
+  console.log(scrollToLineId);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (scrollToLineId) {
+        console.log(scrollToLineId, verseRefs[scrollToLineId!]);
+        document.getElementById(scrollToLineId)?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        // verseRefs[scrollToLineId].current.scrollIntoView({
+        //   behavior: "smooth",
+        //   block: "center",
+        // });
+      }
+    }, 100);
+  }, [scrollToLineId, verseRefs]);
+
+  // console.log(scrollToLineId, verseRefs[scrollToLineId!].current);
 
   return (
     <div className={`${shobhika.className} px-4`}>
@@ -42,15 +66,16 @@ const Chapter = ({
           />
         );
       })}
-      {chapter.verses?.map((verse: any) => {
+      {chapter.verses?.map((verse: Verse) => {
         return (
-          <div key={verse.id} className="py-2 md:py-3">
+          <div id={verse.id} key={verse.id} className="py-2 md:py-3">
             {verse.lines.map((line: Line, index: number) => {
               if (line && !verseRefs[verse.id + index]) {
                 verseRefs[verse.id + index] = React.createRef();
               }
               return (
                 <LineComp
+                  lineId={verse.id}
                   key={index}
                   line={line}
                   index={index}

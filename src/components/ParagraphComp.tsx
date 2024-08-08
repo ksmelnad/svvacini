@@ -30,6 +30,7 @@ const ParagraphComp = ({
 
   return (
     <p
+      id={para.id}
       key={para.id}
       ref={paraIdRef}
       className={` py-2 md:py-3 cursor-pointer ${

@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { IndicTransliterate, Language } from "@ai4bharat/indic-transliterate";
-import { getTransliterateSuggestions } from "@ai4bharat/indic-transliterate";
+import React, { useEffect, useRef, useState } from "react";
+// import {
+//   IndicTransliterate,
+//   IndicTransliterateProps,
+//   Language,
+// } from "@ai4bharat/indic-transliterate";
 // import "@ai4bharat/indic-transliterate/dist/index.css";
 // import Sanscript from "@indic-transliteration/sanscript";
 import Sanscript from "@/utils/sanscript";
@@ -11,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import dynamic from "next/dynamic";
 
 import {
   Select,
@@ -31,6 +35,14 @@ interface Docs {
   // word_id: string;
   _version_: number;
 }
+
+const IndicTransliterate = dynamic(
+  () =>
+    import("@ai4bharat/indic-transliterate").then(
+      (mod) => mod.IndicTransliterate
+    ),
+  { ssr: false }
+);
 
 function Search() {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -70,6 +82,14 @@ function Search() {
     मेघदूतम्: false,
     ईशावास्योपनिषद्: false,
   });
+
+  // const transliterateRef = useRef({} );
+
+  // useEffect(() => {
+  //   if (transliterateRef.current) {
+  //     transliterateRef.current = queryString;
+  //   }
+  // }, [queryString]);
 
   // if (isAiBharat) {
   //   document.querySelector(
@@ -162,7 +182,7 @@ function Search() {
     docSet.clear();
 
     try {
-      const res = await fetch("/api/solr", {
+      const res = await fetch("/api/solr-direct", {
         method: "POST",
         body: JSON.stringify({
           queryString,

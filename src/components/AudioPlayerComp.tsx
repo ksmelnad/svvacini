@@ -73,7 +73,7 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({
   return (
     <H5AudioPlayer
       ref={audioRef}
-      // autoPlay={false}
+      autoPlay={false}
       src={src}
       layout="horizontal"
       // customAdditionalControls={[<RepeatControls />]}

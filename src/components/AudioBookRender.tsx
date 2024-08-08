@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { shobhika, shobhikaBold } from "@/utils/shobhika";
 import AudioPlayerComp from "@/components/AudioPlayerComp";
 import "react-h5-audio-player/lib/styles.css";
@@ -7,16 +7,78 @@ import { Button } from "./ui/button";
 import Chapter from "./Chapter";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
+import { useSearchParams } from "next/navigation";
+import {
+  Book,
+  Chapter as ChapterType,
+  Paragraph,
+  Section,
+  Verse,
+} from "@prisma/client";
 
 interface AudioBookRenderProps {
-  bookData: any;
+  bookData: BookWithRelations | null;
 }
+
+type BookWithRelations = Book & {
+  chapters: (ChapterType & {
+    paragraphs: Paragraph[];
+    verses: Verse[];
+    sections: (Section & {
+      paragraphs: Paragraph[];
+      verses: Verse[];
+    })[];
+  })[];
+};
+
+const findChapterOrderById = (bookData: BookWithRelations, lineId: string) => {
+  for (const chapter of bookData.chapters) {
+    // Check paragraphs in the chapter
+    if (chapter.paragraphs.some((paragraph) => paragraph.id === lineId)) {
+      return chapter.order;
+    }
+    // Check verses in the chapter
+    if (chapter.verses.some((verse) => verse.id === lineId)) {
+      return chapter.order;
+    }
+    // Check paragraphs in sections and subsections
+    for (const section of chapter.sections) {
+      if (section.paragraphs.some((paragraph) => paragraph.id === lineId)) {
+        return chapter.order;
+      }
+      // Check verses in sections and subsections
+      if (section.verses.some((verse) => verse.id === lineId)) {
+        return chapter.order;
+      }
+      // for (const subsection of section.subsections) {
+      //   if (subsection.paragraphs.some(paragraph => paragraph.id === id)) {
+      //     return chapter.order;
+      //   }
+      // }
+    }
+  }
+  throw new Error(`ID not found`);
+};
 
 const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [selectedTextTime, setSelectedTextTime] = useState(0);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [sidebarActive, setSidebarActive] = useState(false);
+
+  const searchParams = useSearchParams();
+  const lineId = searchParams.get("lineId");
+
+  // console.log(lineId, type);
+
+  useEffect(() => {
+    if (lineId) {
+      const chapterOder = findChapterOrderById(bookData!, lineId);
+      setCurrentChapterIndex(chapterOder - 1);
+      console.log(chapterOder - 1);
+    }
+  }, [bookData, lineId]);
+
   //   console.log(currentTime);
   //   console.log("Content type:", typeof content);
   //   console.log(content.map);
@@ -38,8 +100,8 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
     setCurrentChapterIndex((prev) => prev - 1);
   };
 
-  if (bookData.chapters.length === 0) {
-    return <div>No data</div>;
+  if (bookData?.chapters.length === 0) {
+    return <div className="max-w-3xl mx-auto">No data</div>;
   }
 
   return (
@@ -70,14 +132,15 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                 {bookData?.title}{" "}
               </p>
 
-              <p className="">({bookData.author})</p>
+              <p className="">({bookData?.author})</p>
             </div>
           </div>
 
           <Chapter
-            chapter={bookData.chapters[currentChapterIndex]}
+            chapter={bookData?.chapters[currentChapterIndex]}
             currentTime={currentTime}
             setSelectedTextTime={setSelectedTextTime}
+            scrollToLineId={lineId}
           />
           <div className="py-2 md:py-3 flex justify-center items-center gap-4">
             <Button
@@ -90,7 +153,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             <Button
               variant="outline"
               onClick={handleNextButton}
-              disabled={currentChapterIndex === bookData.chapters.length - 1}
+              disabled={currentChapterIndex === bookData?.chapters.length! - 1}
             >
               Next
             </Button>
@@ -98,7 +161,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
         </div>
 
         <div className="sticky bottom-0">
-          {bookData.chapters[currentChapterIndex].audio && (
+          {bookData?.chapters[currentChapterIndex].audio && (
             <AudioPlayerComp
               src={bookData.chapters[currentChapterIndex].audio || ""}
               selectedTextTime={selectedTextTime}
