@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Menu } from "lucide-react";
 
 function SignOut() {
@@ -51,7 +53,7 @@ async function Navbar() {
   const session = await auth();
 
   return (
-    <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 text-gray-200 ">
+    <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 text-gray-100 ">
       <nav className="max-w-5xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
         <Link href="/">
           <h3
@@ -61,13 +63,13 @@ async function Navbar() {
           </h3>
         </Link>
 
-        <ul className="hidden md:flex gap-8 px-6 font-serif text-sm tracking-wide ">
+        <ul className="hidden lg:flex gap-4 px-4 font-serif text-sm tracking-wide ">
           {navitems.map((item, index) => (
             <li key={index}>
               <Button
                 asChild
                 variant="link"
-                className="font-serif text-sm tracking-wide text-gray-200 "
+                className="font-serif text-gray-100 text-sm tracking-wide "
               >
                 <Link className="" href={item.url}>
                   {item.title}
@@ -75,50 +77,97 @@ async function Navbar() {
               </Button>
             </li>
           ))}
-        </ul>
-        <div className="flex gap-4">
-          {session?.user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar>
-                  <AvatarImage src={session.user.image!} />
-                  {/* <AvatarFallback>CN</AvatarFallback> */}
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {/* <DropdownMenuLabel>Dashboard</DropdownMenuLabel> */}
-                {/* <DropdownMenuSeparator /> */}
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <SignOut />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button
-              asChild
-              variant="link"
-              className="font-serif text-sm tracking-wide text-gray-200 "
-            >
-              <Link href="/api/auth/signin">Sign in</Link>
-            </Button>
-          )}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="md:hidden" asChild>
-              <Button variant="outline" size="icon">
-                <Menu />
+          <li>
+            {session?.user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar>
+                    <AvatarImage src={session.user.image!} />
+                    {/* <AvatarFallback>CN</AvatarFallback> */}
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {/* <DropdownMenuLabel>Dashboard</DropdownMenuLabel> */}
+                  {/* <DropdownMenuSeparator /> */}
+                  {/* <DropdownMenuItem>Dashboard</DropdownMenuItem> */}
+                  {/* <DropdownMenuSeparator /> */}
+                  <DropdownMenuItem>
+                    <SignOut />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                asChild
+                variant="link"
+                className="font-serif text-sm tracking-wide text-gray-200 "
+              >
+                <Link href="/api/auth/signin">Sign in</Link>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {navitems.map((item, index) => (
-                <DropdownMenuItem key={index} asChild>
-                  <Link href={item.url}>{item.title}</Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+            )}
+          </li>
+          <li>
+            <Tabs defaultValue="english" className="max-w-fit">
+              <TabsList>
+                <TabsTrigger value="english">En</TabsTrigger>
+                <TabsTrigger value="sanskrit">San</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </li>
+        </ul>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger className="lg:hidden" asChild>
+            <Button variant="outline" size="icon">
+              <Menu />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {navitems.map((item, index) => (
+              <DropdownMenuItem key={index} asChild>
+                <Link href={item.url}>{item.title}</Link>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              {session?.user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Avatar>
+                      <AvatarImage src={session.user.image!} />
+                      {/* <AvatarFallback>CN</AvatarFallback> */}
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {/* <DropdownMenuLabel>Dashboard</DropdownMenuLabel> */}
+                    {/* <DropdownMenuSeparator /> */}
+                    {/* <DropdownMenuItem>Dashboard</DropdownMenuItem> */}
+                    {/* <DropdownMenuSeparator /> */}
+                    <DropdownMenuItem>
+                      <SignOut />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button
+                  asChild
+                  variant="link"
+                  className="font-serif text-sm tracking-wide  "
+                >
+                  <Link href="/api/auth/signin">Sign in</Link>
+                </Button>
+              )}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Tabs defaultValue="english" className="max-w-fit">
+                <TabsList>
+                  <TabsTrigger value="english">En</TabsTrigger>
+                  <TabsTrigger value="sanskrit">San</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </nav>
     </header>
   );

@@ -45,7 +45,7 @@ function Sidebar({
     <div
       className={`${
         sidebarActive ? "block" : "hidden"
-      } fixed top-16 left-0  bg-[#efe7d673] border-r shadow-sm w-64  h-full  
+      } fixed top-16 left-0  bg-[#efe7d673] border-r border-r-[bg-primary] shadow-sm w-64  h-full  
       
       ${shobhika.className} `}
     >
