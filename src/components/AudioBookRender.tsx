@@ -5,7 +5,7 @@ import AudioPlayerComp from "@/components/AudioPlayerComp";
 import "react-h5-audio-player/lib/styles.css";
 import { Button } from "./ui/button";
 import Chapter from "./Chapter";
-import { Menu } from "lucide-react";
+import { ArrowLeft, Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 import { useSearchParams } from "next/navigation";
 import {
@@ -15,6 +15,18 @@ import {
   Section,
   Verse,
 } from "@prisma/client";
+import {
+  Select,
+  SelectGroup,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectLabel,
+} from "@/components/ui/select";
+
+import { ArrowRight } from "lucide-react";
+import { useScriptStore } from "@/utils/useScriptStore";
 
 interface AudioBookRenderProps {
   bookData: BookWithRelations | null;
@@ -29,6 +41,26 @@ type BookWithRelations = Book & {
       verses: Verse[];
     })[];
   })[];
+};
+
+const scripts: {
+  [key: string]: string;
+} = {
+  itrans: "ITRANS",
+  devanagari: "Devanagari",
+  iast: "IAST",
+  hk: "Harvard-Kyoto",
+  slp1: "SLP1",
+  velthuis: "Velthuis",
+  wx: "WX",
+  kannada: "Kannada",
+  malayalam: "Malayalam",
+  tamil: "Tamil",
+  telugu: "Telugu",
+  bengali: "Bengali",
+  gurmukhi: "Gurmukhi",
+  gujarati: "Gujarati",
+  oriya: "Oriya",
 };
 
 const findChapterOrderById = (bookData: BookWithRelations, lineId: string) => {
@@ -64,10 +96,14 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [selectedTextTime, setSelectedTextTime] = useState(0);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
-  const [sidebarActive, setSidebarActive] = useState(false);
+  const [sidebarActive, setSidebarActive] = useState(true);
 
   const searchParams = useSearchParams();
   const lineId = searchParams.get("lineId");
+
+  const { script, setScript } = useScriptStore();
+  // console.log(script);
+
 
   // console.log(lineId, type);
 
@@ -105,7 +141,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   }
 
   return (
-    <div className="">
+    <div className="max-w-7xl mx-auto">
       <div>
         <Sidebar
           bookData={bookData}
@@ -117,7 +153,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
       </div>
       <div className="">
         <div className="max-w-3xl mx-auto md:ml-64 md:mr-auto min-h-screen">
-          <div className="flex gap-4 mb-6 px-4">
+          <div className="lg:ml-10 flex gap-4 items-center mb-6 px-4">
             <Button
               variant="ghost"
               size="icon"
@@ -134,29 +170,50 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
 
               <p className="">({bookData?.author})</p>
             </div>
+            <Select onValueChange={setScript} value={script}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Choose script" />
+              </SelectTrigger>
+              <SelectContent id="select-script">
+                <SelectGroup>
+                  <SelectLabel>Script</SelectLabel>
+                  {Object.keys(scripts).map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {scripts[key]}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
-          <Chapter
-            chapter={bookData?.chapters[currentChapterIndex]}
-            currentTime={currentTime}
-            setSelectedTextTime={setSelectedTextTime}
-            scrollToLineId={lineId}
-          />
-          <div className="py-2 md:py-3 flex justify-center items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={handlePreviousButton}
-              disabled={currentChapterIndex === 0}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleNextButton}
-              disabled={currentChapterIndex === bookData?.chapters.length! - 1}
-            >
-              Next
-            </Button>
+          <div className="lg:ml-10">
+            <Chapter
+              chapter={bookData?.chapters[currentChapterIndex]}
+              currentTime={currentTime}
+              setSelectedTextTime={setSelectedTextTime}
+              scrollToLineId={lineId}
+            />
+            <div className="py-2 md:py-3 flex justify-center items-center gap-4">
+              <Button
+                variant="outline"
+                onClick={handlePreviousButton}
+                disabled={currentChapterIndex === 0}
+                className="flex gap-2 items-center"
+              >
+                <ArrowLeft size={16} /> <span>Previous</span>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleNextButton}
+                disabled={
+                  currentChapterIndex === bookData?.chapters.length! - 1
+                }
+                className="flex gap-2 items-center"
+              >
+                <span>Next</span> <ArrowRight size={16} />
+              </Button>
+            </div>
           </div>
         </div>
 

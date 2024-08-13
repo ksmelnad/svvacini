@@ -45,11 +45,11 @@ function Sidebar({
     <div
       className={`${
         sidebarActive ? "block" : "hidden"
-      } fixed top-16 left-0  bg-[#efe7d673] border-r border-r-[bg-primary] shadow-sm w-64  h-full  
+      } fixed top-16   bg-[#efe7d673] border-r border-r-[bg-primary] shadow-sm w-64  h-full  
       
       ${shobhika.className} `}
     >
-      <h3 className="px-4 text-xl py-4">{bookData.title}</h3>
+      <h3 className="px-4 text-xl py-4">अनुक्रमणिका</h3>
       <hr />
       <ul className="pl-6 pr-4 pt-4 space-y-4">
         {bookData.chapters.map((chapter: any, chIndex: number) => (

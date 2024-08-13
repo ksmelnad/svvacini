@@ -1,6 +1,8 @@
 "use client";
+import { useScriptStore } from "@/utils/useScriptStore";
 import { Line, Paragraph, Verse } from "@prisma/client";
 import React, { useEffect, useRef } from "react";
+import Sanscript from "@/utils/sanscript";
 
 interface LineProps {
   lineId: string;
@@ -21,6 +23,9 @@ const LineComp = ({
 }: LineProps) => {
   const isActive =
     currentTime >= parseFloat(line.begin) && currentTime < parseFloat(line.end);
+
+  const { script } = useScriptStore();
+  console.log("Script in LineComp: ", script);
 
   useEffect(() => {
     if (isActive && lineRef.current) {
@@ -43,13 +48,13 @@ const LineComp = ({
         line.text.split("\n").map((text: string, index: number) => {
           return (
             <span className="" key={index}>
-              {text}
+              {Sanscript.t(text, "devanagari", script)}
               <br />
             </span>
           );
         })
       ) : (
-        <span className="">{line.text}</span>
+        <span className="">{Sanscript.t(line.text, "devanagari", script)}</span>
       )}
     </p>
   );

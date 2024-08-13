@@ -1,6 +1,9 @@
 "use client";
+import { useScriptStore } from "@/utils/useScriptStore";
 import { Paragraph } from "@prisma/client";
 import React, { useEffect, useRef } from "react";
+import Sanscript from "@/utils/sanscript";
+
 
 interface ParagraphProps {
   para: Paragraph;
@@ -18,6 +21,9 @@ const ParagraphComp = ({
   const isActive =
     currentTime >= parseFloat(para.line.begin) &&
     currentTime < parseFloat(para.line.end);
+
+  const { script } = useScriptStore();
+
 
   useEffect(() => {
     if (isActive && paraIdRef?.current) {
@@ -38,7 +44,7 @@ const ParagraphComp = ({
       }`}
       onClick={() => setSelectedTextTime(parseFloat(para.line.begin))}
     >
-      {para.line.text}
+      {Sanscript.t(para.line.text, "devanagari", script)}
     </p>
   );
 };

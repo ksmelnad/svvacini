@@ -24,7 +24,7 @@ const Chapter = ({
   const verseRefs: { [key: string]: React.RefObject<any> } = useRef({}).current;
 
   const router = useRouter();
-  console.log(scrollToLineId);
+  // console.log(scrollToLineId);
 
   useEffect(() => {
     setTimeout(() => {
@@ -43,6 +43,8 @@ const Chapter = ({
   }, [scrollToLineId, verseRefs]);
 
   // console.log(scrollToLineId, verseRefs[scrollToLineId!].current);
+
+  
 
   return (
     <div className={`${shobhika.className} px-4`}>

@@ -37,7 +37,7 @@ async function Navbar() {
     },
 
     {
-      title: "Anveṣhiṇī",
+      title: "Anveṣiṇī",
       url: "/search",
     },
     {
@@ -54,7 +54,7 @@ async function Navbar() {
 
   return (
     <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 text-gray-100 ">
-      <nav className="max-w-5xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
         <Link href="/">
           <h3
             className={`text-2xl font-bold tracking-wide  ${shobhikaBold.className} `}
@@ -106,14 +106,14 @@ async function Navbar() {
               </Button>
             )}
           </li>
-          <li>
+          {/* <li>
             <Tabs defaultValue="english" className="max-w-fit">
               <TabsList>
                 <TabsTrigger value="english">En</TabsTrigger>
                 <TabsTrigger value="sanskrit">San</TabsTrigger>
               </TabsList>
             </Tabs>
-          </li>
+          </li> */}
         </ul>
 
         <DropdownMenu>
