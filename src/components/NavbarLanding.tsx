@@ -49,7 +49,7 @@ async function NavbarLanding() {
   const session = await auth();
 
   return (
-    <header className="shadow-md sticky top-0 left-0 right-0 backdrop-blur-xl ">
+    <header className="shadow-sm sticky top-0 left-0 right-0 backdrop-blur-xl ">
       <nav className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4 px-4 py-6 ">
       <Link href="/" className="w-1/3">
           <h3

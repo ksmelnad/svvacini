@@ -32,11 +32,11 @@ const features = [
 
 const Features = () => {
   return (
-    <div className="p-4 my-20 py-10  max-w-5xl mx-auto bg-[#c8c5bc] rounded-md flex flex-col gap-12 md:gap-20">
+    <div className=" px-4 my-20 py-10 md:py-20 max-w-5xl mx-4 md:mx-auto bg-white/50 rounded-md flex flex-col gap-12 md:gap-20">
       {features.map((feature, index) => (
         <div
           key={index}
-          className={`px-16 grid grid-cols-1 md:grid-cols-2 place-items-center gap-4 `}
+          className={`px-6 md:px-16 grid grid-cols-1 md:grid-cols-2 place-items-center gap-4 `}
         >
           <Image
             src={feature.src}
@@ -46,8 +46,8 @@ const Features = () => {
             className={index % 2 === 0 ? "md:order-2" : ""}
           />
           <div>
-            <p className="text-2xl lg:text-2xl font-semibold">{feature.item}</p>
-            <p className="text-lg mt-4">{feature.desc}</p>
+            <p className="text-lg lg:text-2xl font-semibold">{feature.item}</p>
+            <p className="lg:text-lg mt-4">{feature.desc}</p>
             {feature.href && (
               <Link
                 href={feature.href}

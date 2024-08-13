@@ -18,7 +18,7 @@ const Newsletter = () => {
   };
 
   return (
-    <div className=" py-12">
+    <div className="py-12 ">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">
@@ -28,15 +28,15 @@ const Newsletter = () => {
             Subscribe for news on Sanskrit Books and Audio Books additions
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 sm:flex">
-          <div className="min-w-0 flex-1">
+        <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row  justify-center items-center">
+          <div className="min-w-0 ">
             <Label htmlFor="email" className="sr-only">
               Email address
             </Label>
             <Input
               id="email"
               type="email"
-              
+              className="max-w-sm"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

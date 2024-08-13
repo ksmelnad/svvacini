@@ -52,7 +52,7 @@ const BookTitlesMarquee: React.FC = () => {
           {[...row, ...row].map((title, titleIndex) => (
             <span
               key={titleIndex}
-              className={`inline-block ${randomFontSize()} px-5 font-semibold whitespace-nowrap`}
+              className={`inline-block ${randomFontSize()} px-5 whitespace-nowrap`}
             >
               {title}
             </span>
