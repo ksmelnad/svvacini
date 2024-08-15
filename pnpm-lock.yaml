@@ -74,6 +74,9 @@ importers:
       eslint-config-next:
         specifier: 14.2.4
         version: 14.2.4(eslint@8.57.0)(typescript@5.5.3)
+      konva:
+        specifier: ^9.3.14
+        version: 9.3.14
       lucide-react:
         specifier: ^0.400.0
         version: 0.400.0(react@18.3.1)
@@ -86,6 +89,9 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.9
         version: 5.0.0-beta.9(next@14.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      peaks.js:
+        specifier: ^3.4.1
+        version: 3.4.1(konva@9.3.14)(waveform-data@4.5.0)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -113,6 +119,9 @@ importers:
       typescript:
         specifier: 5.5.3
         version: 5.5.3
+      waveform-data:
+        specifier: ^4.5.0
+        version: 4.5.0
       window-size:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1402,6 +1411,9 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
+  eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
+
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
@@ -1886,6 +1898,9 @@ packages:
     resolution: {integrity: sha512-NOW9QQXMoZGg/oqnVNoNTTIFEIid1627WCffUBJEdMxYApq7mNE7CpzucIPc+ZQg25Phej7IJSmX3hO+oblOtQ==}
     engines: {node: '>=0.10.0'}
 
+  konva@9.3.14:
+    resolution: {integrity: sha512-Gmm5lyikGYJyogKQA7Fy6dKkfNh350V6DwfZkid0RVrGYP2cfCsxuMxgF5etKeCv7NjXYpJxKqi1dYkIkX/dcA==}
+
   language-subtag-registry@0.3.23:
     resolution: {integrity: sha512-0K65Lea881pHotoGEa5gDlMxt3pctLi2RplBb7Ezh4rRdLEOtgi7n4EwK9lamnUCkKBqaeKRVebTq6BAxSkpXQ==}
 
@@ -2173,6 +2188,13 @@ packages:
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  peaks.js@3.4.1:
+    resolution: {integrity: sha512-Sy6ix9Fa1z9s5rXZ7Xslf7JRTU5sABieuPQf+P7qCWBEvfb75ylIHYFdkf17iQtyvX/TbABO+PmtfCYf7gwPTg==}
+    engines: {node: '>= 8.11.2'}
+    peerDependencies:
+      konva: '>= 8.3.14 < 10'
+      waveform-data: '>= 4.3.0 < 5'
 
   performance-now@2.1.0:
     resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
@@ -2766,6 +2788,9 @@ packages:
     engines: {node: '>=6.0'}
     deprecated: The library contains critical security issues and should not be used for production! The maintenance of the project has been discontinued. Consider migrating your code to isolated-vm.
     hasBin: true
+
+  waveform-data@4.5.0:
+    resolution: {integrity: sha512-fLT8yLGUuVhDBMVVOD2AGqHlLLVT/zfGlSIKgfqMCwFJGtkvY9eEhu0EL9W55lFJQt4r53X5Ncj86ymTGJlJTA==}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -4094,7 +4119,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.9.0(eslint@8.57.0)
       eslint-plugin-react: 7.35.0(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -4118,7 +4143,7 @@ snapshots:
       enhanced-resolve: 5.17.1
       eslint: 8.57.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.6
       is-core-module: 2.15.0
@@ -4140,7 +4165,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -4284,6 +4309,8 @@ snapshots:
   estraverse@5.3.0: {}
 
   esutils@2.0.3: {}
+
+  eventemitter3@5.0.1: {}
 
   extend@3.0.2: {}
 
@@ -4790,6 +4817,8 @@ snapshots:
     dependencies:
       is-buffer: 1.1.6
 
+  konva@9.3.14: {}
+
   language-subtag-registry@0.3.23: {}
 
   language-tags@1.0.9:
@@ -5050,6 +5079,12 @@ snapshots:
       minipass: 7.1.2
 
   path-type@4.0.0: {}
+
+  peaks.js@3.4.1(konva@9.3.14)(waveform-data@4.5.0):
+    dependencies:
+      eventemitter3: 5.0.1
+      konva: 9.3.14
+      waveform-data: 4.5.0
 
   performance-now@2.1.0: {}
 
@@ -5709,6 +5744,8 @@ snapshots:
     dependencies:
       acorn: 8.12.1
       acorn-walk: 8.3.3
+
+  waveform-data@4.5.0: {}
 
   webidl-conversions@7.0.0: {}
 

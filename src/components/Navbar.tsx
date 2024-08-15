@@ -53,7 +53,7 @@ async function Navbar() {
   const session = await auth();
 
   return (
-    <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 text-gray-100 ">
+    <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 z-10 text-gray-100 ">
       <nav className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
         <Link href="/">
           <h3
