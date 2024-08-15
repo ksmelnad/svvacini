@@ -21,11 +21,11 @@ model Book {
 }
 
 model Chapter {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  order Int   
-  chapterId String @unique
-  audio String?
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  order     Int
+  chapterId String  @unique
+  audio     String?
 
   book   Book   @relation("chapters", fields: [bookId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bookId String @db.ObjectId
@@ -36,9 +36,9 @@ model Chapter {
 }
 
 model Section {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  order Int   
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  order     Int
   sectionId String @unique
 
   chapter   Chapter @relation("sections", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -52,7 +52,7 @@ model Section {
 model Subsection {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   title        String
-  order        Int    
+  order        Int
   subsectionId String @unique
 
   section   Section @relation("subsections", fields: [sectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -65,8 +65,8 @@ model Subsection {
 model Paragraph {
   id    String  @id @default(auto()) @map("_id") @db.ObjectId
   title String?
-  order Int     
-  line Line
+  order Int
+  line  Line
 
   chapter   Chapter? @relation("paragraphs", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   chapterId String?  @db.ObjectId
@@ -80,46 +80,44 @@ model Paragraph {
 
 model Verse {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  order Int   
-  lines Line[] 
+  order Int
+  lines Line[]
 
-  chapter Chapter? @relation("verses", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  chapterId String? @db.ObjectId
+  chapter   Chapter? @relation("verses", fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chapterId String?  @db.ObjectId
 
-  section Section? @relation("verses", fields: [sectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  sectionId String? @db.ObjectId
+  section   Section? @relation("verses", fields: [sectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sectionId String?  @db.ObjectId
 
-  subsection Subsection? @relation("verses", fields: [subsectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  subsectionId String? @db.ObjectId
-
-  
+  subsection   Subsection? @relation("verses", fields: [subsectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subsectionId String?     @db.ObjectId
 }
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String   @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
 
+  Peaks Peaks[]
 }
 
 model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.String
-  access_token       String?  @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.String
-  session_state      String?
-
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -129,15 +127,13 @@ model Account {
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String @db.ObjectId
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-
-
 model VerificationToken {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
@@ -149,4 +145,19 @@ type Line {
   begin String
   end   String
   text  String
+}
+
+model Peaks {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+  title     String   @unique
+  points    Point[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+type Point {
+  labelText String
+  time      String
 }

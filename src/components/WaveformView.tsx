@@ -1,8 +1,23 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Peaks, { PeaksInstance, Point } from "peaks.js";
 import { Button } from "./ui/button";
 import { ZoomIn, ZoomOut } from "lucide-react";
+import { useToast } from "./ui/use-toast";
+import axios from "axios";
+import useSWR from "swr";
+import { Peaks as PeaksPrisma } from "@prisma/client";
+
+import {
+  Select,
+  SelectGroup,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectLabel,
+} from "@/components/ui/select";
+import { Input } from "./ui/input";
 
 interface WaveformViewProps {
   audioUrl: string;
@@ -11,6 +26,11 @@ interface WaveformViewProps {
   audioBuffer: AudioBuffer | null;
   setPoints: (points: Point[]) => void;
 }
+
+const fetcher = async (url: string) => {
+  const response = await axios.get(url);
+  return response.data;
+};
 
 const WaveformView: React.FC<WaveformViewProps> = ({
   audioUrl,
@@ -25,6 +45,19 @@ const WaveformView: React.FC<WaveformViewProps> = ({
 
   const peaksRef = useRef<PeaksInstance | undefined>(undefined);
   const pointNumberRef = useRef<number>(0);
+  const [isTitleForm, setIsTitleForm] = useState(false);
+
+  const {
+    data: savedPeaksData = [] as PeaksPrisma[],
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<PeaksPrisma[]>("/api/peaks", fetcher);
+
+  const [selectedTitle, setSelectedTitle] = useState<string>("");
+  const [newTitle, setNewTitle] = useState<string>("");
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const initPeaks = () => {
@@ -59,6 +92,25 @@ const WaveformView: React.FC<WaveformViewProps> = ({
 
     initPeaks();
   }, [audioUrl, audioContentType, audioContext, audioBuffer]);
+
+  useEffect(() => {
+    if (peaksRef.current) {
+      const itemData: PeaksPrisma = savedPeaksData.find(
+        (item: PeaksPrisma) => item.title === selectedTitle
+      )!;
+
+      if (itemData) {
+        itemData.points.map((item) =>
+          peaksRef.current?.points.add({
+            time: Number(item.time),
+            labelText: item.labelText,
+            editable: true,
+          })
+        );
+        pointNumberRef.current = itemData.points.length;
+      }
+    }
+  }, [selectedTitle, savedPeaksData]);
 
   const zoomIn = () => {
     if (peaksRef.current) {
@@ -110,7 +162,7 @@ const WaveformView: React.FC<WaveformViewProps> = ({
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = 'data.json';
+      link.download = "data.json";
       link.click();
       URL.revokeObjectURL(url);
       // link.setAttribute("download", "points.json");
@@ -120,21 +172,161 @@ const WaveformView: React.FC<WaveformViewProps> = ({
     }
   };
 
+  const saveData = async () => {
+    if (peaksRef.current) {
+      if (newTitle.trim() === "") {
+        toast({
+          variant: "destructive",
+          description: "Title cannot be empty!",
+        });
+        return;
+      }
+
+      const points = peaksRef.current.points.getPoints();
+      if (points.length === 0) {
+        toast({
+          variant: "destructive",
+          description: "No points found!",
+        });
+        return;
+      }
+
+      const pointsData = points.map((point) => ({
+        labelText: point.labelText,
+        time: point.time.toFixed(3),
+      }));
+      try {
+        const response = await axios.post("/api/peaks", {
+          title: newTitle,
+          points: pointsData,
+        });
+        if (response.status === 201) {
+          toast({
+            description: "Successfully Saved!",
+          });
+          // mutate({ ...savedPeaksData, title: newTitle, points: pointsData });
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Error: ",
+            error.response?.data.message || "Unexpected Error"
+          );
+          toast({
+            variant: "destructive",
+            description: error.response?.data.message,
+          });
+        } else {
+          console.log("Unexpected Error", error);
+          toast({
+            variant: "destructive",
+            description: "Unexpected Error",
+          });
+        }
+      }
+    }
+    setIsTitleForm(false);
+  };
+
+  const updateData = async () => {
+    if (peaksRef.current) {
+      if (selectedTitle.trim() === "") {
+        toast({
+          variant: "destructive",
+          description: "No title selected to update",
+        });
+        return;
+      }
+
+      const points = peaksRef.current.points.getPoints();
+      if (points.length === 0) {
+        toast({
+          variant: "destructive",
+          description: "No points found!",
+        });
+        return;
+      }
+
+      const pointsData = points.map((point) => ({
+        labelText: point.labelText,
+        time: point.time.toFixed(3),
+      }));
+
+      const selectedTitleId = savedPeaksData.find(
+        (item: PeaksPrisma) => item.title === selectedTitle
+      )?.id;
+
+      try {
+        const response = await axios.put(`/api/peaks/${selectedTitleId}`, {
+          points: pointsData,
+        });
+        if (response.status === 200) {
+          toast({
+            description: "Successfully Updated!",
+          });
+          // mutate({ ...savedPeaksData, title: newTitle, points: pointsData });
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Error: ",
+            error.response?.data.message || "Unexpected Error"
+          );
+          toast({
+            variant: "destructive",
+            description: error.response?.data.message,
+          });
+        } else {
+          console.log("Unexpected Error", error);
+          toast({
+            variant: "destructive",
+            description: "Unexpected Error",
+          });
+        }
+      }
+    }
+  };
+
   const onPeaksReady = () => {
     console.log("Peaks.js is ready");
   };
 
   return (
-    <div className="flex flex-col gap-2 py-4">
+    <div className="bg-[#f0eee2]/50 flex flex-col gap-2 p-4">
+      {isLoading ? (
+        <p className="animate-pulse text-gray-500">Loading...</p>
+      ) : (
+        savedPeaksData.length > 0 && (
+          <Select
+            onValueChange={(e) => setSelectedTitle(e)}
+            value={selectedTitle}
+            defaultValue=""
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Load" />
+            </SelectTrigger>
+            <SelectContent id="load-saved-data">
+              <SelectGroup>
+                <SelectLabel>Peaks</SelectLabel>
+                {savedPeaksData.map((item: PeaksPrisma) => (
+                  <SelectItem key={item.id} value={item.title}>
+                    {item.title}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )
+      )}
       <audio ref={audioElementRef} controls src={audioUrl}>
         Your browser does not support the audio element.
       </audio>
       <div
-        className="shadow-md mx-auto mb-2 h-24 w-full"
+        className="bg-white border-t border-b border-gray-500  mx-auto mb-2 h-24 w-full"
         ref={overviewWaveformRef}
       ></div>
       <div
-        className="shadow-md mx-auto mt-6 mb-2 h-60 w-full"
+        className="bg-white border-t border-b border-gray-500 mx-auto mt-6 mb-2 h-60 w-full"
         ref={zoomviewWaveformRef}
       ></div>
 
@@ -147,11 +339,45 @@ const WaveformView: React.FC<WaveformViewProps> = ({
         </Button>
       </div>
       <div className="flex gap-2">
-        <Button onClick={addPoint}>Add Point</Button>
-        <Button variant="outline" onClick={logMarkers}>Log</Button>
-        <Button variant="outline" onClick={generateJSON}>Json</Button>
-        
+        <Button size="sm" onClick={addPoint}>
+          Point +
+        </Button>
+        <Button variant="outline" size="sm" onClick={logMarkers}>
+          Log
+        </Button>
+        <Button variant="outline" size="sm" onClick={generateJSON}>
+          Json
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsTitleForm(true)}
+        >
+          Save
+        </Button>
+        <Button
+          disabled={!selectedTitle}
+          variant="outline"
+          size="sm"
+          onClick={updateData}
+        >
+          Update
+        </Button>
       </div>
+      {isTitleForm && (
+        <div className="p-4 border rounded-sm  flex gap-2">
+          <Input
+            type="text"
+            placeholder="Title"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
+          <Button onClick={saveData}>Submit</Button>
+          <Button variant="outline" onClick={() => setIsTitleForm(false)}>
+            Cancel
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

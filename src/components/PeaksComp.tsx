@@ -1,17 +1,17 @@
-"use client"
-import { useState } from 'react';
-import WaveformView from '@/components//WaveformView';
-import PointTable from '@/components//PointTable';
-import { Point } from 'peaks.js';
-import { Input } from '@/components/ui/input';
+"use client";
+import { useState } from "react";
+import WaveformView from "@/components//WaveformView";
+import PointTable from "@/components//PointTable";
+import { Point } from "peaks.js";
+import { Input } from "@/components/ui/input";
 
 const PeaksComp: React.FC = () => {
   const [audioData, setAudioData] = useState({
-    audioUrl: '',
-    audioContentType: '',
+    audioUrl: "",
+    audioContentType: "",
     audioBuffer: null as AudioBuffer | null,
     audioContext: null as AudioContext | null,
-    points: [] as Point[]
+    points: [] as Point[],
   });
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +20,7 @@ const PeaksComp: React.FC = () => {
 
     const audioContext = new AudioContext();
     const audioBuffer = await audioContext.decodeAudioData(
-      await fetch(URL.createObjectURL(file)).then(res => res.arrayBuffer())
+      await fetch(URL.createObjectURL(file)).then((res) => res.arrayBuffer())
     );
 
     setAudioData({
@@ -28,17 +28,20 @@ const PeaksComp: React.FC = () => {
       audioContentType: file.type,
       audioContext: audioContext,
       audioBuffer: audioBuffer,
-      points: []
+      points: [],
     });
   };
 
   return (
-    <div className="container mx-auto py-5">
-      <h1 className="text-2xl font-semibold text-center">Peaks.js App</h1>
+    <div className="max-w-5xl mx-auto px-2 md:px-4 py-5">
+      <h1 className="text-2xl font-semibold text-center">
+        Timestamp Generator
+      </h1>
+      <h3 className="text-gray-500 text-center">Peaks.js</h3>
 
       <Input
         type="file"
-        accept='audio/*'
+        accept="audio/*"
         className="my-4 max-w-fit"
         onChange={handleFileChange}
       />
