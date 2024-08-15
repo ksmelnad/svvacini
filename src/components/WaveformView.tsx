@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import Peaks, { PeaksInstance, Point } from "peaks.js";
 import { Button } from "./ui/button";
+import { ZoomIn, ZoomOut } from "lucide-react";
 
 interface WaveformViewProps {
   audioUrl: string;
@@ -103,15 +104,19 @@ const WaveformView: React.FC<WaveformViewProps> = ({
 
       const jsonData = JSON.stringify(pointsData, null, 2);
 
+      // if (typeof navigator !== 'undefined' && navigator.) {
       const blob = new Blob([jsonData], { type: "application/json" });
-      const url = window.URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "points.json");
-      document.body.appendChild(link);
+      link.download = 'data.json';
       link.click();
-      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      // link.setAttribute("download", "points.json");
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
     }
   };
 
@@ -134,17 +139,18 @@ const WaveformView: React.FC<WaveformViewProps> = ({
       ></div>
 
       <div className="flex gap-2 mb-4">
-        <Button variant="outline" onClick={zoomIn}>
-          Zoom In
+        <Button variant="outline" size="icon" onClick={zoomIn}>
+          <ZoomIn />
         </Button>
-        <Button variant="outline" onClick={zoomOut}>
-          Zoom Out
+        <Button variant="outline" size="icon" onClick={zoomOut}>
+          <ZoomOut />
         </Button>
       </div>
       <div className="flex gap-2">
         <Button onClick={addPoint}>Add Point</Button>
-        <Button onClick={logMarkers}>Log Markers</Button>
-        <Button onClick={generateJSON}>Generate JSON</Button>
+        <Button variant="outline" onClick={logMarkers}>Log</Button>
+        <Button variant="outline" onClick={generateJSON}>Json</Button>
+        
       </div>
     </div>
   );
