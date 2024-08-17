@@ -292,7 +292,7 @@ const WaveformView: React.FC<WaveformViewProps> = ({
   };
 
   return (
-    <div className="bg-[#f0eee2]/50 flex flex-col gap-2 p-4">
+    <div className="bg-[#f0eee2]/50 rounded flex flex-col gap-2 p-4">
       {isLoading ? (
         <p className="animate-pulse text-gray-500">Loading...</p>
       ) : (

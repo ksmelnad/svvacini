@@ -15,6 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Menu } from "lucide-react";
+import Image from "next/image";
 
 function SignOut() {
   return (
@@ -47,7 +48,7 @@ async function NavbarLanding() {
     {
       title: "Peaks",
       url: "/peaks",
-    }
+    },
   ];
 
   const session = await auth();
@@ -55,7 +56,8 @@ async function NavbarLanding() {
   return (
     <header className="shadow-sm sticky top-0 left-0 right-0 z-10 backdrop-blur-xl ">
       <nav className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4 px-4 py-6 ">
-      <Link href="/" className="w-1/3">
+        <Link href="/" className="w-1/3 flex gap-2 items-center">
+          <Image src="/logo.svg" alt="logo" width={50} height={50} />
           <h3
             className={`text-xl md:text-3xl lg:text-3xl  ${shobhikaBold.className} `}
           >
@@ -68,7 +70,7 @@ async function NavbarLanding() {
               <Button
                 asChild
                 variant="link"
-                className="font-serif text-gray-700 text-sm tracking-wide "
+                className="font-serif text-gray-700 tracking-wide "
               >
                 <Link className="" href={item.url}>
                   {item.title}
@@ -77,7 +79,6 @@ async function NavbarLanding() {
             </li>
           ))}
         </ul>
-     
 
         <ul className="hidden lg:flex gap-4 px-4 font-serif text-sm tracking-wide ">
           {/* <li>
@@ -110,7 +111,7 @@ async function NavbarLanding() {
             ) : (
               <Button
                 asChild
-                
+
                 // className="font-serif text-sm tracking-wide text-gray-700 "
               >
                 <Link href="/api/auth/signin">Sign in</Link>

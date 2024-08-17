@@ -15,6 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Menu } from "lucide-react";
+import Image from "next/image";
 
 function SignOut() {
   return (
@@ -55,7 +56,8 @@ async function Navbar() {
   return (
     <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 z-10 text-gray-100 ">
       <nav className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
-        <Link href="/">
+        <Link href="/" className="flex gap-2 items-center">
+          <Image src="/logo.svg" alt="logo" width={50} height={50} />
           <h3
             className={`text-2xl font-bold tracking-wide  ${shobhikaBold.className} `}
           >
