@@ -1,31 +1,28 @@
 "use client";
-import { useScriptStore } from "@/utils/useScriptStore";
-import { Line, Paragraph, Verse } from "@prisma/client";
-import React, { useEffect, useRef } from "react";
+import {
+  useCurrentTimeStore,
+  useScriptStore,
+  useSelectedTextTimeStore,
+} from "@/utils/useStore";
+import { Line as LineType } from "@prisma/client";
+import React, { useEffect } from "react";
 import Sanscript from "@/utils/sanscript";
 
 interface LineProps {
   lineId: string;
-  line: Line;
+  line: LineType;
   index: number;
-  currentTime: number;
-  setSelectedTextTime: React.Dispatch<React.SetStateAction<number>>;
   lineRef: React.RefObject<any>;
 }
 
-const LineComp = ({
-  lineId,
-  line,
-  index,
-  currentTime,
-  setSelectedTextTime,
-  lineRef,
-}: LineProps) => {
+const Line = ({ lineId, line, index, lineRef }: LineProps) => {
+  const { currentTime } = useCurrentTimeStore();
+
   const isActive =
     currentTime >= parseFloat(line.begin) && currentTime < parseFloat(line.end);
 
   const { script } = useScriptStore();
-  console.log("Script in LineComp: ", script);
+  const { setSelectedTextTime } = useSelectedTextTimeStore();
 
   useEffect(() => {
     if (isActive && lineRef.current) {
@@ -41,7 +38,9 @@ const LineComp = ({
       id={lineId}
       key={index}
       ref={lineRef}
-      className={`cursor-pointer ${isActive ? "text-xl text-red-700" : ""}`}
+      className={`ml-2 md:ml-4 cursor-pointer ${
+        isActive ? "text-xl text-red-700" : ""
+      }`}
       onClick={() => setSelectedTextTime(parseFloat(line.begin))}
     >
       {line.text.includes("\n") ? (
@@ -60,4 +59,4 @@ const LineComp = ({
   );
 };
 
-export default LineComp;
+export default Line;

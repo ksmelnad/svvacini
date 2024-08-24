@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 
 import { ArrowRight } from "lucide-react";
-import { useScriptStore } from "@/utils/useScriptStore";
+import { useScriptStore, useSelectedTextTimeStore } from "@/utils/useStore";
 
 interface AudioBookRenderProps {
   bookData: BookWithRelations | null;
@@ -93,25 +93,23 @@ const findChapterOrderById = (bookData: BookWithRelations, lineId: string) => {
 };
 
 const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [selectedTextTime, setSelectedTextTime] = useState(0);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
-  const [sidebarActive, setSidebarActive] = useState(true);
+  const [sidebarActive, setSidebarActive] = useState(false);
 
   const searchParams = useSearchParams();
   const lineId = searchParams.get("lineId");
 
   const { script, setScript } = useScriptStore();
+  const { selectedTextTime, setSelectedTextTime } = useSelectedTextTimeStore();
+
   // console.log(script);
-
-
-  // console.log(lineId, type);
+  // console.log("BookData: ", bookData);
 
   useEffect(() => {
     if (lineId) {
       const chapterOder = findChapterOrderById(bookData!, lineId);
       setCurrentChapterIndex(chapterOder - 1);
-      console.log(chapterOder - 1);
+      // console.log(chapterOder - 1);
     }
   }, [bookData, lineId]);
 
@@ -129,10 +127,12 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   };
 
   const handleNextButton = () => {
+    setSelectedTextTime(0);
     setCurrentChapterIndex((prev) => prev + 1);
   };
 
   const handlePreviousButton = () => {
+    setSelectedTextTime(0);
     setCurrentChapterIndex((prev) => prev - 1);
   };
 
@@ -141,37 +141,36 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div>
-        <Sidebar
-          bookData={bookData}
-          currentChapterIndex={currentChapterIndex}
-          setCurrentChapterIndex={setCurrentChapterIndex}
-          sidebarActive={sidebarActive}
-          setSidebarActive={setSidebarActive}
-        />
-      </div>
-      <div className="">
-        <div className="max-w-3xl mx-auto md:ml-64 md:mr-auto min-h-screen">
-          <div className="lg:ml-10 flex gap-4 items-center mb-6 px-4">
+    <div className="flex">
+      <Sidebar
+        bookData={bookData}
+        currentChapterIndex={currentChapterIndex}
+        setCurrentChapterIndex={setCurrentChapterIndex}
+        sidebarActive={sidebarActive}
+        setSidebarActive={setSidebarActive}
+      />
+
+      <main className="flex-1  max-w-5xl mx-auto lg:ml-64  ">
+        <div className="mb-16">
+          <div className="flex gap-2 items-center justify-between mb-6 px-4 py-4 w-full">
             <Button
               variant="ghost"
               size="icon"
-              className="-ml-2 my-2"
+              className="lg:hidden -ml-2 my-2"
               onClick={() => setSidebarActive(!sidebarActive)}
             >
               <Menu />
             </Button>
 
-            <div className="w-full  p-4 flex justify-center gap-4 ">
-              <p className={`text-2xl ${shobhikaBold.className} `}>
+            <div className="px-2 flex flex-row lg:justify-center gap-4 ">
+              <h2 className={`text-xl lg:text-2xl ${shobhikaBold.className} `}>
                 {bookData?.title}{" "}
-              </p>
+              </h2>
 
-              <p className="">({bookData?.author})</p>
+              <p className="text-sm">({bookData?.author})</p>
             </div>
             <Select onValueChange={setScript} value={script}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder="Choose script" />
               </SelectTrigger>
               <SelectContent id="select-script">
@@ -187,13 +186,13 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             </Select>
           </div>
 
-          <div className="lg:ml-10">
-            <Chapter
-              chapter={bookData?.chapters[currentChapterIndex]}
-              currentTime={currentTime}
-              setSelectedTextTime={setSelectedTextTime}
-              scrollToLineId={lineId}
-            />
+          <div className="">
+            <div className="flex justify-center">
+              <Chapter
+                chapter={bookData?.chapters[currentChapterIndex]}
+                scrollToLineId={lineId}
+              />
+            </div>
             <div className="py-2 md:py-3 flex justify-center items-center gap-4">
               <Button
                 variant="outline"
@@ -216,17 +215,15 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             </div>
           </div>
         </div>
-
-        <div className="sticky bottom-0">
+        <div className="sticky bottom-0 w-full">
           {bookData?.chapters[currentChapterIndex].audio && (
             <AudioPlayerComp
               src={bookData.chapters[currentChapterIndex].audio || ""}
-              selectedTextTime={selectedTextTime}
-              setCurrentTime={setCurrentTime}
+              chapter={bookData.chapters[currentChapterIndex]}
             />
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

@@ -1,13 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-// import {
-//   IndicTransliterate,
-//   IndicTransliterateProps,
-//   Language,
-// } from "@ai4bharat/indic-transliterate";
-// import "@ai4bharat/indic-transliterate/dist/index.css";
-// import Sanscript from "@indic-transliteration/sanscript";
 import Sanscript from "@/utils/sanscript";
 import axios from "axios";
 import { Button } from "@/components/ui/button";

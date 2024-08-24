@@ -60,6 +60,24 @@ const getBook = async (slug: string): Promise<BookWithRelations | null> => {
                     order: "asc",
                   },
                 },
+
+                subsections: {
+                  orderBy: {
+                    order: "asc",
+                  },
+                  include: {
+                    paragraphs: {
+                      orderBy: {
+                        order: "asc",
+                      },
+                    },
+                    verses: {
+                      orderBy: {
+                        order: "asc",
+                      },
+                    },
+                  },
+                },
               },
             },
           },

@@ -1,29 +1,27 @@
 "use client";
-import { useScriptStore } from "@/utils/useScriptStore";
-import { Paragraph } from "@prisma/client";
+import {
+  useCurrentTimeStore,
+  useScriptStore,
+  useSelectedTextTimeStore,
+} from "@/utils/useStore";
+import { Paragraph as ParagraphType } from "@prisma/client";
 import React, { useEffect, useRef } from "react";
 import Sanscript from "@/utils/sanscript";
 
-
 interface ParagraphProps {
-  para: Paragraph;
-  currentTime: number;
-  setSelectedTextTime: React.Dispatch<React.SetStateAction<number>>;
+  para: ParagraphType;
   paraIdRef: React.RefObject<any>;
 }
 
-const ParagraphComp = ({
-  para,
-  currentTime,
-  setSelectedTextTime,
-  paraIdRef,
-}: ParagraphProps) => {
+const Paragraph = ({ para, paraIdRef }: ParagraphProps) => {
+  const { currentTime } = useCurrentTimeStore();
+
   const isActive =
     currentTime >= parseFloat(para.line.begin) &&
     currentTime < parseFloat(para.line.end);
 
   const { script } = useScriptStore();
-
+  const { setSelectedTextTime } = useSelectedTextTimeStore();
 
   useEffect(() => {
     if (isActive && paraIdRef?.current) {
@@ -39,8 +37,8 @@ const ParagraphComp = ({
       id={para.id}
       key={para.id}
       ref={paraIdRef}
-      className={` py-2 md:py-3 cursor-pointer ${
-        isActive ? "text-xl text-red-700" : ""
+      className={` ml-2 md:ml-4 py-2 md:py-3 cursor-pointer ${
+        isActive ? "text-base lg:text-xl text-red-700" : "text-sm"
       }`}
       onClick={() => setSelectedTextTime(parseFloat(para.line.begin))}
     >
@@ -49,4 +47,4 @@ const ParagraphComp = ({
   );
 };
 
-export default ParagraphComp;
+export default Paragraph;

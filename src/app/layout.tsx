@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
+import NavbarLanding from "@/components/NavbarLanding";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,7 +23,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
+      <body className={`${inter.className}`}>
+        <NavbarLanding />
         {children}
         <Toaster />
       </body>

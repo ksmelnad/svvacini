@@ -1,6 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { shobhika } from "@/utils/shobhika";
+import { useSelectedTextTimeStore } from "@/utils/useStore";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { X } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface TreeNode {
   title: string;
@@ -26,6 +38,7 @@ function Sidebar({
   setCurrentChapterIndex: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [smallWidth, setSmallWidth] = useState(false);
+  const { selectedTextTime, setSelectedTextTime } = useSelectedTextTimeStore();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -41,59 +54,82 @@ function Sidebar({
     }
   }, []);
 
-  return (
+  const ModalOverlay = () => (
     <div
-      className={`${
-        sidebarActive ? "block" : "hidden"
-      } fixed top-16   bg-[#efe7d673] border-r border-r-[bg-primary] shadow-sm w-64  h-full  
+      className={`flex md:hidden fixed top-0 right-0 bottom-0 left-0 bg-black/50 z-30`}
+      onClick={() => {
+        setSidebarActive(false);
+      }}
+    />
+  );
+
+  return (
+    <aside>
+      <div
+        className={`${
+          sidebarActive ? "ml:0" : "-ml-64 lg:ml-0"
+        } fixed top-0 lg:top-16 left-0 bottom-0 h-full bg-white shadow-md w-64 
+      transition-[margin-left] ease-in-out duration-500  z-40
       
       ${shobhika.className} `}
-    >
-      <h3 className="px-4 text-xl py-4">अनुक्रमणिका</h3>
-      <hr />
-      <ul className="pl-6 pr-4 pt-4 space-y-4">
-        {bookData.chapters.map((chapter: any, chIndex: number) => (
-          <li key={chapter.id}>
-            <button
-              className={`block text-left text-sm hover:text-red-700 transition-colors
+      >
+        <div className="flex justify-between items-center">
+          <h3 className="px-4 text-xl py-4 mt-4">अनुक्रमणिका</h3>
+          <Button
+            variant="ghost"
+            onClick={() => setSidebarActive(false)}
+            className="lg:hidden mr-2"
+            size="icon"
+          >
+            <X size={20} />
+          </Button>
+        </div>
+
+        <ul className="pl-6 pr-4 pt-4 space-y-4">
+          {bookData.chapters.map((chapter: any, chIndex: number) => (
+            <li key={chapter.id}>
+              <button
+                className={`block text-left text-sm hover:text-red-700 transition-colors
               ${
                 currentChapterIndex === chIndex
                   ? "text-red-700 font-semibold"
                   : ""
               }`}
-              onClick={() => {
-                setCurrentChapterIndex(chIndex);
-                if (smallWidth) {
+                onClick={() => {
+                  setSelectedTextTime(0);
+                  setCurrentChapterIndex(chIndex);
+
                   setSidebarActive(false);
-                }
-              }}
-            >
-              {chapter.title}
-            </button>
-            {chapter.sections.map((section: any, index: number) => (
-              <ul
-                key={section.id}
-                className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
+                }}
               >
-                <li key={section.id} className="">
-                  <button
-                    className="text-sm hover:text-red-700 transition-colors"
-                    onClick={() => {
-                      setCurrentChapterIndex(chIndex);
-                      if (smallWidth) {
+                {chapter.title}
+              </button>
+              {chapter.sections.map((section: any, index: number) => (
+                <ul
+                  key={section.id}
+                  className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
+                >
+                  <li key={section.id} className="">
+                    <button
+                      className="text-sm hover:text-red-700 transition-colors"
+                      onClick={() => {
+                        setSelectedTextTime(0);
+                        setCurrentChapterIndex(chIndex);
+
                         setSidebarActive(false);
-                      }
-                    }}
-                  >
-                    {section.title}
-                  </button>
-                </li>
-              </ul>
-            ))}
-          </li>
-        ))}
-      </ul>
-    </div>
+                      }}
+                    >
+                      {section.title}
+                    </button>
+                  </li>
+                </ul>
+              ))}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {sidebarActive && <ModalOverlay />}
+    </aside>
   );
 }
 

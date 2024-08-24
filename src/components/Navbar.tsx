@@ -45,21 +45,23 @@ async function Navbar() {
       title: "Saṃvādinī",
       url: "/samvadini",
     },
-    {
-      title: "Swam",
-      url: "/about",
-    },
   ];
 
   const session = await auth();
 
   return (
-    <header className="bg-[#891F10] shadow-sm sticky top-0 left-0 right-0 z-10 text-gray-100 ">
+    <header className="bg-[#f0eee2] shadow-sm sticky top-0 left-0 right-0 z-10 text-gray-800 h-16  ">
       <nav className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-4 py-3">
         <Link href="/" className="flex gap-2 items-center">
-          <Image src="/logo.svg" alt="logo" width={50} height={50} />
+          <Image
+            src="/logo.svg"
+            alt="logo"
+            width={40}
+            height={40}
+            className="w-8 h-8 md:w-10 md:h-10"
+          />
           <h3
-            className={`text-2xl font-bold tracking-wide  ${shobhikaBold.className} `}
+            className={`text-lg md:text-2xl font-bold tracking-wide  ${shobhikaBold.className} `}
           >
             संस्कृतवाङ्मयवाचिनी
           </h3>
@@ -71,7 +73,7 @@ async function Navbar() {
               <Button
                 asChild
                 variant="link"
-                className="font-serif text-gray-100 text-sm tracking-wide "
+                className="font-serif text-sm tracking-wide text-gray-800"
               >
                 <Link className="" href={item.url}>
                   {item.title}
@@ -102,7 +104,7 @@ async function Navbar() {
               <Button
                 asChild
                 variant="link"
-                className="font-serif text-sm tracking-wide text-gray-200 "
+                className="font-serif text-sm tracking-wide text-gray-800 "
               >
                 <Link href="/api/auth/signin">Sign in</Link>
               </Button>
