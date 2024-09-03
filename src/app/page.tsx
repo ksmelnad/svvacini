@@ -8,7 +8,7 @@ import Newsletter from "@/components/Newsletter";
 
 export default function Home() {
   return (
-    <main className="bg-[#f0eee2] text-gray-800">
+    <main className="bg-[#f0eee2]">
       {/* <NavbarLanding /> */}
       <Hero />
       <BookTitlesMarquee />

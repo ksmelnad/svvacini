@@ -26,13 +26,16 @@ const features = [
     item: "Read in Any Script of Your Choice",
     desc: "Access Sanskrit texts in your preferred script. Our platform supports all major Indic scripts, ensuring you read comfortably and authentically.",
     src: "/Green_translation_icon_Devanagari.svg.png",
-    href: ""
+    href: "",
   },
 ];
 
 const Features = () => {
   return (
-    <div className=" px-4 my-20 py-10 md:py-20 max-w-5xl mx-4 md:mx-auto bg-white/50 rounded-md flex flex-col gap-12 md:gap-20">
+    <div
+      id="features"
+      className="px-4 my-20 py-10 md:py-20 max-w-5xl mx-4 md:mx-auto bg-white/50 rounded-md flex flex-col gap-12 md:gap-20"
+    >
       {features.map((feature, index) => (
         <div
           key={index}
@@ -51,13 +54,13 @@ const Features = () => {
             {feature.href && (
               <Link
                 href={feature.href}
-                
+
                 // variant="link"
               >
-               <Button 
-                className="mt-4 font-serif text-gray-100 text-sm tracking-wide "
-               
-               > Start</Button>
+                <Button className="mt-4 font-serif text-gray-100 text-sm tracking-wide ">
+                  {" "}
+                  Start
+                </Button>
               </Link>
             )}
           </div>

@@ -2,25 +2,14 @@ import prisma from "@/utils/prismadb";
 import books from "@/data/books.json";
 import booksMeta from "@/data/books-meta/booksMeta.json";
 import AudioBookRender from "@/components/AudioBookRender";
-import { Book, Chapter, Paragraph, Section, Verse } from "@prisma/client";
-
+import { writeFile, writeFileSync } from "fs";
+import { BookWithRelations } from "@/utils/types";
 // import {Book } from "@prisma/client"
 
 interface StaticBook {
   book: string;
   book_id: string;
 }
-
-type BookWithRelations = Book & {
-  chapters: (Chapter & {
-    paragraphs: Paragraph[];
-    verses: Verse[];
-    sections: (Section & {
-      paragraphs: Paragraph[];
-      verses: Verse[];
-    })[];
-  })[];
-};
 
 const getBook = async (slug: string): Promise<BookWithRelations | null> => {
   try {
@@ -60,7 +49,6 @@ const getBook = async (slug: string): Promise<BookWithRelations | null> => {
                     order: "asc",
                   },
                 },
-
                 subsections: {
                   orderBy: {
                     order: "asc",
@@ -69,6 +57,9 @@ const getBook = async (slug: string): Promise<BookWithRelations | null> => {
                     paragraphs: {
                       orderBy: {
                         order: "asc",
+                      },
+                      include: {
+                        commentaries: true,
                       },
                     },
                     verses: {
@@ -84,6 +75,9 @@ const getBook = async (slug: string): Promise<BookWithRelations | null> => {
         },
       },
     });
+
+    // writeFileSync("src/data/bookData.json", JSON.stringify(bookData), "utf-8");
+    // console.log("Saved bookData!");
     return bookData as BookWithRelations | null;
   } catch (error) {
     console.error(error);
@@ -106,6 +100,7 @@ export async function generateStaticParams() {
 export default async function Page({ params }: { params: { slug: string } }) {
   const bookData = await getBook(params?.slug);
   // const bookMeta = booksMeta.find((book) => book.id === params?.slug);
+  // console.log(bookData);
 
   return <AudioBookRender bookData={bookData} />;
 }

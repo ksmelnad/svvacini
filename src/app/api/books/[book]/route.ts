@@ -38,6 +38,19 @@ export async function GET(
                     order: "asc",
                   },
                 },
+                subsections: {
+                  orderBy: {
+                    order: "asc",
+                  },
+                  include: {
+                    paragraphs: {
+                      include: {
+                        commentaries: true,
+                      },
+                     
+                    }
+                  }
+                }
               },
             },
           },

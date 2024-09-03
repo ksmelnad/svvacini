@@ -67,38 +67,33 @@ async function NavbarLanding() {
   const session = await auth();
 
   return (
-    <header className="sticky top-0 z-60 py-2 bg-[#f0eee2] shadow-sm   backdrop-blur-xl h-16 ">
-      <nav className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4 px-4 ">
+    <header className="sticky top-0 z-60 py-2 bg-[#f0eee2] shadow-sm backdrop-blur-xl h-16">
+      <nav className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4 px-4 py-1">
         <Link href="/" className="w-1/3 flex gap-2 items-center">
           <Image
             src="/logo.svg"
             alt="logo"
             width={50}
             height={50}
-            className="w-10 h-10 md:w-14 md:h-14"
+            className="w-10 h-10 md:w-12 md:h-12"
           />
           <h3
-            className={`text-xl md:text-3xl lg:text-3xl  ${shobhikaBold.className} `}
+            className={`text-xl md:text-3xl lg:text-3xl mt-2  ${shobhikaBold.className} `}
           >
             संस्कृतवाचिनी
           </h3>
         </Link>
-        <ul className="hidden lg:flex gap-2 font-serif text-sm tracking-wide ">
+        <ul className="hidden lg:flex gap-2 ">
           {navitems.map((item, index) => (
             <li key={index}>
-              <Link
-                className={`text-gray-700 ${buttonVariants({
-                  variant: "link",
-                })} font-serif  tracking-wide lg:text-lg  `}
-                href={item.url}
-              >
+              <Link className={`px-4 py-2 hover:underline `} href={item.url}>
                 {item.title}
               </Link>
             </li>
           ))}
         </ul>
 
-        <ul className="hidden lg:flex gap-4 px-4 font-serif text-sm tracking-wide ">
+        <ul className="hidden lg:flex">
           {/* <li>
             <Tabs defaultValue="english" className="max-w-fit">
               <TabsList>
@@ -117,10 +112,6 @@ async function NavbarLanding() {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {/* <DropdownMenuLabel>Dashboard</DropdownMenuLabel> */}
-                  {/* <DropdownMenuSeparator /> */}
-                  {/* <DropdownMenuItem>Dashboard</DropdownMenuItem> */}
-                  {/* <DropdownMenuSeparator /> */}
                   <DropdownMenuItem>
                     <SignOut />
                   </DropdownMenuItem>
@@ -129,9 +120,7 @@ async function NavbarLanding() {
             ) : (
               <Link
                 href="/api/auth/signin"
-                className={`text-gray-700 ${buttonVariants({
-                  variant: "link",
-                })} font-serif  tracking-wide lg:text-lg  `}
+                className={`px-4 py-2 hover:underline `}
               >
                 Sign in
               </Link>
@@ -140,7 +129,7 @@ async function NavbarLanding() {
         </ul>
         <Sheet>
           <SheetTrigger asChild className="lg:hidden">
-            <Button variant="outline">
+            <Button variant="ghost">
               <Menu />
             </Button>
           </SheetTrigger>

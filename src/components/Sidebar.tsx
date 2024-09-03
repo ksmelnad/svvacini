@@ -86,46 +86,47 @@ function Sidebar({
         </div>
 
         <ul className="pl-6 pr-4 pt-4 space-y-4">
-          {bookData.chapters.map((chapter: any, chIndex: number) => (
-            <li key={chapter.id}>
-              <button
-                className={`block text-left text-sm hover:text-red-700 transition-colors
+          {bookData?.chapters &&
+            bookData?.chapters.map((chapter: any, chIndex: number) => (
+              <li key={chapter.id}>
+                <button
+                  className={`block text-left text-sm hover:text-red-700 transition-colors
               ${
                 currentChapterIndex === chIndex
                   ? "text-red-700 font-semibold"
                   : ""
               }`}
-                onClick={() => {
-                  setSelectedTextTime(0);
-                  setCurrentChapterIndex(chIndex);
+                  onClick={() => {
+                    setSelectedTextTime(0);
+                    setCurrentChapterIndex(chIndex);
 
-                  setSidebarActive(false);
-                }}
-              >
-                {chapter.title}
-              </button>
-              {chapter.sections.map((section: any, index: number) => (
-                <ul
-                  key={section.id}
-                  className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
+                    setSidebarActive(false);
+                  }}
                 >
-                  <li key={section.id} className="">
-                    <button
-                      className="text-sm hover:text-red-700 transition-colors"
-                      onClick={() => {
-                        setSelectedTextTime(0);
-                        setCurrentChapterIndex(chIndex);
+                  {chapter.title}
+                </button>
+                {chapter.sections.map((section: any, index: number) => (
+                  <ul
+                    key={section.id}
+                    className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
+                  >
+                    <li key={section.id} className="">
+                      <button
+                        className="text-sm hover:text-red-700 transition-colors"
+                        onClick={() => {
+                          setSelectedTextTime(0);
+                          setCurrentChapterIndex(chIndex);
 
-                        setSidebarActive(false);
-                      }}
-                    >
-                      {section.title}
-                    </button>
-                  </li>
-                </ul>
-              ))}
-            </li>
-          ))}
+                          setSidebarActive(false);
+                        }}
+                      >
+                        {section.title}
+                      </button>
+                    </li>
+                  </ul>
+                ))}
+              </li>
+            ))}
         </ul>
       </div>
       {sidebarActive && <ModalOverlay />}

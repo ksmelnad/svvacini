@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -21,8 +22,18 @@ export default function Hero() {
             Sanskrit Books
           </p>
           <div className="flex gap-4 py-6 md:py-8">
-            <Button>Start</Button>
-            <Button variant="outline">Learn More</Button>
+            <Link
+              href="/audiobooks"
+              className={buttonVariants({ variant: "default" })}
+            >
+              Start
+            </Link>
+            <Link
+              href="#features"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              Learn More
+            </Link>
           </div>
         </div>
       </div>

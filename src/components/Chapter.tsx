@@ -57,6 +57,7 @@ const Chapter = ({
         if (!paragraphRefs[para.id]) {
           paragraphRefs[para.id] = React.createRef();
         }
+
         return (
           <Paragraph
             key={para.id}
@@ -90,7 +91,7 @@ const Chapter = ({
         return (
           <div key={section.id}>
             <p
-              className={`text-lg lg:text-xl text-red-600   pt-4 ${shobhikaBold.className} `}
+              className={`text-lg lg:text-xl text-red-600 mt-4 bg-[#f0eee2] py-4 px-2 ${shobhikaBold.className} `}
             >
               {section.title}
             </p>

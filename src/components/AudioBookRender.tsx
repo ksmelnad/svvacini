@@ -13,6 +13,7 @@ import {
   Chapter as ChapterType,
   Paragraph,
   Section,
+  Subsection,
   Verse,
 } from "@prisma/client";
 import {
@@ -27,6 +28,7 @@ import {
 
 import { ArrowRight } from "lucide-react";
 import { useScriptStore, useSelectedTextTimeStore } from "@/utils/useStore";
+import CustomAudioPlayer from "./CustomAudioPlayer";
 
 interface AudioBookRenderProps {
   bookData: BookWithRelations | null;
@@ -37,7 +39,11 @@ type BookWithRelations = Book & {
     paragraphs: Paragraph[];
     verses: Verse[];
     sections: (Section & {
-      paragraphs: Paragraph[];
+      subsections: (Subsection & {
+        paragraphs: (Paragraph & {
+          commentaries: any[];
+        })[];
+      })[];
       verses: Verse[];
     })[];
   })[];
@@ -103,7 +109,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   const { selectedTextTime, setSelectedTextTime } = useSelectedTextTimeStore();
 
   // console.log(script);
-  // console.log("BookData: ", bookData);
+  console.log("BookData: ", bookData);
 
   useEffect(() => {
     if (lineId) {
@@ -161,8 +167,9 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             >
               <Menu />
             </Button>
+            <span className="hidden lg:block">&nbsp;</span>
 
-            <div className="px-2 flex flex-row lg:justify-center gap-4 ">
+            <div className="px-2 flex justify-center items-center gap-4 ">
               <h2 className={`text-xl lg:text-2xl ${shobhikaBold.className} `}>
                 {bookData?.title}{" "}
               </h2>
@@ -217,7 +224,11 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
         </div>
         <div className="sticky bottom-0 w-full">
           {bookData?.chapters[currentChapterIndex].audio && (
-            <AudioPlayerComp
+            // <AudioPlayerComp
+            //   src={bookData.chapters[currentChapterIndex].audio || ""}
+            //   chapter={bookData.chapters[currentChapterIndex]}
+            // />
+            <CustomAudioPlayer
               src={bookData.chapters[currentChapterIndex].audio || ""}
               chapter={bookData.chapters[currentChapterIndex]}
             />

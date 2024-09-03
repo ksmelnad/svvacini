@@ -38,8 +38,8 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
       id={lineId}
       key={index}
       ref={lineRef}
-      className={`ml-2 md:ml-4 cursor-pointer ${
-        isActive ? "text-xl text-red-700" : ""
+      className={`ml-2 md:ml-4 cursor-pointer  ${
+        isActive ? "py-4 text-xl text-red-700" : "py-2 lg:text-lg"
       }`}
       onClick={() => setSelectedTextTime(parseFloat(line.begin))}
     >
@@ -47,13 +47,23 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
         line.text.split("\n").map((text: string, index: number) => {
           return (
             <span className="" key={index}>
-              {Sanscript.t(text, "devanagari", script)}
+              {Sanscript.t(
+                text.replace(/ *(॥|।)/g, " $1 "),
+                "devanagari",
+                script
+              )}
               <br />
             </span>
           );
         })
       ) : (
-        <span className="">{Sanscript.t(line.text, "devanagari", script)}</span>
+        <span className="">
+          {Sanscript.t(
+            line.text.replace(/ *(॥|।)/g, " $1 "),
+            "devanagari",
+            script
+          )}
+        </span>
       )}
     </p>
   );
