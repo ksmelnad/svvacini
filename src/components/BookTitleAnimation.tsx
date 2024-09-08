@@ -17,7 +17,7 @@ const bookTitles = [
   "Pro TypeScript",
   "TailwindCSS for Beginners",
 ];
-import books from "@/data/books.json";
+import data from "@/data/books.json";
 
 const randomFontSize = () => {
   const sizes = [
@@ -35,8 +35,10 @@ const BookTitlesMarquee: React.FC = () => {
   const rows: string[][] = [[], [], []];
 
   // Distribute the book titles into three rows
-  books.forEach((item, index) => {
-    rows[index % 3].push(item.book);
+  data.forEach((item, index) => {
+    item.books.forEach((book, index) => {
+      rows[index % 3].push(book.book);
+    });
   });
 
   return (

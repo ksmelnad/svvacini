@@ -2,19 +2,52 @@
 import React, { useEffect, useRef, useState } from "react";
 import { shobhika, shobhikaBold } from "@/utils/shobhika";
 import {
+  Commentary,
   Line as LineType,
   Paragraph as ParagraphType,
+} from "@prisma/client";
+import {
+  Chapter as ChapterType,
+  Section,
+  Subsection,
   Verse,
 } from "@prisma/client";
 import Paragraph from "./Paragraph";
 import Line from "./Line";
 import { useRouter } from "next/navigation";
 
+type ChapterWithRelations = ChapterType & {
+  paragraphs: (ParagraphType & {
+    commentaries: Commentary[];
+    // paraIdRef: React.RefObject<any>;
+  })[];
+  verses: Verse[];
+  sections: (Section & {
+    paragraphs: (ParagraphType & {
+      commentaries: Commentary[];
+      // paraIdRef: React.RefObject<any>;
+    })[];
+    verses: Verse[];
+    subsections: (Subsection & {
+      paragraphs: (ParagraphType & {
+        commentaries: Commentary[];
+        // paraIdRef: React.RefObject<any>;
+      })[];
+      verses: Verse[];
+    })[];
+  })[];
+};
+interface ParagraphProps {
+  para: ParagraphType & {
+    commentaries: Commentary[];
+  };
+}
+
 const Chapter = ({
   chapter,
   scrollToLineId,
 }: {
-  chapter: any;
+  chapter: ChapterWithRelations;
   scrollToLineId: string | null;
 }) => {
   const paragraphRefs: { [key: string]: React.RefObject<any> } = useRef(
@@ -53,7 +86,7 @@ const Chapter = ({
         {chapter.title}
       </h2>
 
-      {chapter.paragraphs.map((para: ParagraphType) => {
+      {chapter.paragraphs.map((para) => {
         if (!paragraphRefs[para.id]) {
           paragraphRefs[para.id] = React.createRef();
         }
@@ -87,7 +120,7 @@ const Chapter = ({
         );
       })}
 
-      {chapter.sections?.map((section: any) => {
+      {chapter.sections?.map((section) => {
         return (
           <div key={section.id}>
             <p
@@ -95,7 +128,7 @@ const Chapter = ({
             >
               {section.title}
             </p>
-            {section.paragraphs.map((para: ParagraphType) => {
+            {section.paragraphs.map((para) => {
               if (!paragraphRefs[para.id]) {
                 paragraphRefs[para.id] = React.createRef();
               }
@@ -107,13 +140,13 @@ const Chapter = ({
                 />
               );
             })}
-            {section.subsections?.map((subsection: any) => {
+            {section.subsections?.map((subsection) => {
               return (
                 <div key={subsection.id}>
                   <p className={`pt-4 ${shobhikaBold.className} `}>
                     {subsection.title}
                   </p>
-                  {subsection.paragraphs.map((para: ParagraphType) => {
+                  {subsection.paragraphs.map((para) => {
                     if (!paragraphRefs[para.id]) {
                       paragraphRefs[para.id] = React.createRef();
                     }

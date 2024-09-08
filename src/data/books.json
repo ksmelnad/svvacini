@@ -1,76 +1,165 @@
 [
   {
-    "book": "ब्रह्मसूत्राणि",
-    "book_id": "BV_UPG_MIM_UMIM_AV_MG_BMS"
+    "name": "वेदान्तः",
+    "books": [
+      {
+        "book": "ब्रह्मसूत्राणि",
+        "book_id": "BV_UPG_MIM_UMIM_AV_MG_BMS",
+        "category": "प्रस्थानत्रयम्",
+        "author": "व्यासः",
+        "audio": "डा. वासुदेवः ऐतालः"
+      },
+      {
+        "book": "भगवद्गीता",
+        "book_id": "BV_UPG_MIM_UMIM_AV_MG_BG",
+        "category": "प्रस्थानत्रयम्",
+        "author": "व्यासः",
+        "audio": "कुमारिः अदितिः"
+      },
+      {
+        "book": "वेदान्तसारः",
+        "book_id": "BV_UPG_MIM_UMIM_AV_PG_VS",
+        "category": "प्रकरणग्रन्थाः",
+        "author": "सदानन्दः",
+        "audio": "डा. वासुदेवः ऐतालः"
+      },
+      {
+        "book": "विवेकचूडामणिः",
+        "book_id": "BV_UPG_MIM_UMIM_AV_PG_VC",
+        "category": "प्रकरणग्रन्थाः",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "डा. वासुदेवः ऐतालः"
+      }
+    ]
   },
   {
-    "book": "वेदान्तसारः",
-    "book_id": "BV_UPG_MIM_UMIM_AV_PG_VS"
-  },
-  {
-    "book": "श्रीविष्णुषट्पदी",
-    "book_id": "BV_UPG_MIM_UMIM_AV_IG_SVS"
-  },
-  {
-    "book": "साधनापञ्चकम्",
-    "book_id": "BV_UPG_MIM_UMIM_AV_IG_SP"
+    "name": "ज्योतिषम्",
+    "books": [
+      {
+        "book": "लीलावतीगणितम्",
+        "book_id": "BV_GN_LVG",
+        "category": "गणितम्",
+        "author": "भास्कराचार्यः",
+        "audio": "डा. केशवः मेल्नाडः"
+      },
+      {
+        "book": "आर्यभटीयम्",
+        "book_id": "BV_GN_ARB",
+        "author": "आर्यभटः",
+        "audio": ""
+      },
+
+      {
+        "book": "खण्डखाद्यकम्",
+        "book_id": "BV_GN_KKY",
+        "category": "गणितम्",
+        "author": "ब्रह्मगुप्तः"
+      },
+      {
+        "book": "सूर्यसिद्धान्तः",
+        "book_id": "BV_GN_SS",
+        "category": "गणितम्",
+        "author": ""
+      }
+    ]
   },
 
   {
-    "book": "विवेकचूडामणिः",
-    "book_id": "BV_UPG_MIM_UMIM_AV_PG_VC"
+    "name": "न्यायः",
+    "books": [
+      {
+        "book": "तर्कसङ्ग्रहः",
+        "book_id": "BV_UPG_NY_NYS_NVNYYK_PG_TKS",
+        "author": "अन्नम्भट्टः",
+        "audio": "डा. वासुदेवः ऐतालः"
+      },
+      {
+        "book": "दीपिका",
+        "book_id": "BV_UPG_NY_NYS_NVNYYK_PG_TKS_TKSD",
+        "author": "अन्नम्भट्टः",
+        "audio": ""
+      }
+    ]
   },
   {
-    "book": "शतश्लोकी",
-    "book_id": "BV_UPG_MIM_UMIM_AV_PG_SL"
+    "name": "योगः",
+    "books": [
+      {
+        "book": "योगसूत्रम्",
+        "book_id": "BV_UPG_YOG_YS",
+        "category": "योगः",
+        "author": "पतञ्जलिः",
+        "audio": "डा. नागेन्द्रः पवनः"
+      }
+    ]
   },
 
   {
-    "book": "तर्कसङ्ग्रहः",
-    "book_id": "BV_UPG_NY_NYS_NVNYYK_PG_TKS"
+    "name": "स्त्रोत्राणि",
+    "books": [
+      {
+        "book": "शिवानन्दलहरी",
+        "book_id": "BV_SH_SS_PS_SLA",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "प्रो. के. रामसुब्रमण्यः"
+      },
+      {
+        "book": "शतश्लोकी",
+        "book_id": "BV_UPG_MIM_UMIM_AV_PG_SL",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "प्रो. के. रामसुब्रमण्यः"
+      },
+      {
+        "book": "श्रीदक्षिणामूर्त्यष्टकम्",
+        "book_id": "BV_SH_SS_PS_DM",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "प्रो. के. रामसुब्रमण्यः"
+      },
+
+      {
+        "book": "गणेशपञ्चरत्नम्‌",
+        "book_id": "BV_SH_SS_PS_GP",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "प्रो. के. रामसुब्रमण्यः"
+      },
+      {
+        "book": "सुब्रह्मण्यभुजङ्गम्",
+        "book_id": "BV_SH_SS_PS_SB",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "प्रो. के. रामसुब्रमण्यः"
+      },
+
+      {
+        "book": "साधनापञ्चकम्",
+        "book_id": "BV_UPG_MIM_UMIM_AV_IG_SP",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": "डा. वासुदेवः ऐतालः"
+      },
+      {
+        "book": "श्रीविष्णुषट्पदी",
+        "book_id": "BV_UPG_MIM_UMIM_AV_IG_SVS",
+        "author": "आदिशङ्कराचार्यः",
+        "audio": ""
+      }
+    ]
   },
   {
-    "book": "दीपिका",
-    "book_id": "BV_UPG_NY_NYS_NVNYYK_PG_TKS_TKSD"
-  },
-  {
-    "book": "योगसूत्रम्",
-    "book_id": "BV_UPG_YOG_YS"
-  },
-  {
-    "book": "रघुवंशम्",
-    "book_id": "BV_SH_SS_PS_RV"
-  },
-  {
-    "book": "मेघदूतम्",
-    "book_id": "BV_SH_SS_PS_MD"
-  },
-  {
-    "book": "आर्यभटीयम्",
-    "book_id": "BV_GN_ARB"
-  },
-  {
-    "book": "सूर्यसिद्धान्तः",
-    "book_id": "BV_GN_SS"
-  },
-  {
-    "book": "खण्डखाद्यकम्",
-    "book_id": "BV_GN_KKY"
-  },
-  {
-    "book": "लीलावतीगणितम्",
-    "book_id": "BV_GN_LVG"
-  },
-  {
-    "book": "गणेशपञ्चरत्नम्‌",
-    "book_id": "BV_SH_SS_PS_GP"
-  },
-  {
-    "book": "सुब्रह्मण्यभुजङ्गम्",
-    "book_id": "BV_SH_SS_PS_SB"
-  },
-  {
-    "book": "भगवद्गीता",
-    "book_id": "BV_UPG_MIM_UMIM_AV_MG_BG"
+    "name": "काव्यम्",
+    "books": [
+      {
+        "book": "रघुवंशम्",
+        "book_id": "BV_SH_SS_PS_RV",
+        "category": "काव्यम्",
+        "author": "कालिदासः",
+        "audio": "डा. वासुदेवः ऐतालः"
+      },
+      {
+        "book": "मेघदूतम्",
+        "book_id": "BV_SH_SS_PS_MD",
+        "category": "काव्यम्",
+        "author": "कालिदासः",
+        "audio": "डा. नागेन्द्रः पवनः"
+      }
+    ]
   }
 ]

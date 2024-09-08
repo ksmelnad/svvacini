@@ -64,71 +64,70 @@ function Sidebar({
   );
 
   return (
-    <aside>
-      <div
-        className={`${
-          sidebarActive ? "ml:0" : "-ml-64 lg:ml-0"
-        } fixed top-0 lg:top-16 left-0 bottom-0 h-full bg-white shadow-md w-64 
-      transition-[margin-left] ease-in-out duration-500  z-40
-      
-      ${shobhika.className} `}
-      >
-        <div className="flex justify-between items-center">
-          <h3 className="px-4 text-xl py-4 mt-4">अनुक्रमणिका</h3>
-          <Button
-            variant="ghost"
-            onClick={() => setSidebarActive(false)}
-            className="lg:hidden mr-2"
-            size="icon"
-          >
-            <X size={20} />
-          </Button>
-        </div>
+    <aside
+      className={`${
+        sidebarActive ? "ml-0" : "-ml-64 lg:ml-0"
+      } bg-[#edeae1] fixed top-18 left-2 bottom-2 h-[calc(100vh-5rem)] rounded-md shadow-md w-60 
+  transition-[margin-left] ease-in-out duration-500  z-40
+  
+  ${shobhika.className} `}
+    >
+      <div className="flex justify-between items-center">
+        <h3 className="px-4 text-xl py-4 mt-4">अनुक्रमणिका</h3>
+        <Button
+          variant="ghost"
+          onClick={() => setSidebarActive(false)}
+          className="lg:hidden mr-2"
+          size="icon"
+        >
+          <X size={20} />
+        </Button>
+      </div>
 
-        <ul className="pl-6 pr-4 pt-4 space-y-4">
-          {bookData?.chapters &&
-            bookData?.chapters.map((chapter: any, chIndex: number) => (
-              <li key={chapter.id}>
-                <button
-                  className={`block text-left text-sm hover:text-red-700 transition-colors
+      <ul className="pl-6 pr-4 pt-4 space-y-4">
+        {bookData?.chapters &&
+          bookData?.chapters.map((chapter: any, chIndex: number) => (
+            <li key={chapter.id}>
+              <button
+                className={`block text-left text-sm hover:text-red-700 transition-colors
               ${
                 currentChapterIndex === chIndex
                   ? "text-red-700 font-semibold"
                   : ""
               }`}
-                  onClick={() => {
-                    setSelectedTextTime(0);
-                    setCurrentChapterIndex(chIndex);
+                onClick={() => {
+                  setSelectedTextTime(0);
+                  setCurrentChapterIndex(chIndex);
 
-                    setSidebarActive(false);
-                  }}
+                  setSidebarActive(false);
+                }}
+              >
+                {chapter.title}
+              </button>
+              {chapter.sections.map((section: any, index: number) => (
+                <ul
+                  key={section.id}
+                  className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
                 >
-                  {chapter.title}
-                </button>
-                {chapter.sections.map((section: any, index: number) => (
-                  <ul
-                    key={section.id}
-                    className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
-                  >
-                    <li key={section.id} className="">
-                      <button
-                        className="text-sm hover:text-red-700 transition-colors"
-                        onClick={() => {
-                          setSelectedTextTime(0);
-                          setCurrentChapterIndex(chIndex);
+                  <li key={section.id} className="">
+                    <button
+                      className="text-sm hover:text-red-700 transition-colors"
+                      onClick={() => {
+                        setSelectedTextTime(0);
+                        setCurrentChapterIndex(chIndex);
 
-                          setSidebarActive(false);
-                        }}
-                      >
-                        {section.title}
-                      </button>
-                    </li>
-                  </ul>
-                ))}
-              </li>
-            ))}
-        </ul>
-      </div>
+                        setSidebarActive(false);
+                      }}
+                    >
+                      {section.title}
+                    </button>
+                  </li>
+                </ul>
+              ))}
+            </li>
+          ))}
+      </ul>
+
       {sidebarActive && <ModalOverlay />}
     </aside>
   );

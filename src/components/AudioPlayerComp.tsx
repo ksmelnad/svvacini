@@ -159,15 +159,18 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({ src, chapter }) => {
 
     if (audio && isRepeatActive) {
       audio.currentTime = content[contentIndex].begin;
+      audio.loop = true;
       audio.play();
 
       const handleTimeUpdate = () => {
-        if (audio.currentTime >= content[contentIndex].end) {
+        const buffer = 0.1;
+        if (audio.currentTime >= content[contentIndex].end - buffer) {
           if (currentRepeat < repeatCount) {
             setCurrentRepeat(currentRepeat + 1);
             audio.currentTime = content[contentIndex].begin;
           } else {
             setCurrentRepeat(1);
+            audio.loop = false;
             if (contentIndex < content.length - 1) {
               setContentIndex(contentIndex + 1);
             } else {
@@ -229,46 +232,46 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({ src, chapter }) => {
   const RepeatControls = () => {
     return (
       <Popover>
-        <PopoverTrigger>
-          <Repeat
-            color="gray"
-            size={30}
-            className={isRepeatActive ? "bg-gray-200 shadow-sm px-2 py-1" : ""}
-          />
+        <PopoverTrigger className="relative">
+          <Repeat color={isRepeatActive ? "black" : "gray"} size={25} />
+          {isRepeatActive && (
+            <span className="absolute bottom-0 -right-2 bg-[#f0eee2] p-2 rounded-full w-4 h-4 flex items-center justify-center">
+              {repeatCount}
+            </span>
+          )}
         </PopoverTrigger>
         <PopoverContent className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center">
-            <span>Repeat each</span>
-            <Button
-              disabled={repeatCount === 2}
-              variant="ghost"
-              size="icon"
-              onClick={() => setRepeatCount(Math.max(repeatCount - 1, 2))}
-            >
-              {" "}
-              <MinusIcon />{" "}
-            </Button>
-            {repeatCount}
-            <Button
-              disabled={repeatCount === 5}
-              variant="ghost"
-              size="icon"
-              onClick={() => setRepeatCount(Math.min(repeatCount + 1, 5))}
-            >
-              {" "}
-              <PlusIcon />{" "}
-            </Button>
+          <div className="flex gap-2 items-center justify-between">
+            <p>Repeat each</p>
+            <div className="flex gap-2 items-center">
+              <Button
+                disabled={repeatCount === 2}
+                variant="ghost"
+                size="icon"
+                onClick={() => setRepeatCount(Math.max(repeatCount - 1, 2))}
+              >
+                {" "}
+                <MinusIcon />{" "}
+              </Button>
+              {repeatCount}
+              <Button
+                disabled={repeatCount === 5}
+                variant="ghost"
+                size="icon"
+                onClick={() => setRepeatCount(Math.min(repeatCount + 1, 5))}
+              >
+                {" "}
+                <PlusIcon />{" "}
+              </Button>
+            </div>
           </div>
-          <div>Repeat range start 1 and 5</div>
-          <div className="flex justify-between">
+
+          <div className="mt-6 flex justify-between">
             <Button
               variant={"outline"}
-              onClick={() => setIsRepeatActive(false)}
+              onClick={() => setIsRepeatActive(!isRepeatActive)}
             >
-              Cancel
-            </Button>
-            <Button variant="outline" onClick={() => setIsRepeatActive(true)}>
-              Apply
+              {isRepeatActive ? "Disable" : "Enable"}
             </Button>
           </div>
         </PopoverContent>
@@ -281,6 +284,8 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({ src, chapter }) => {
       <AudioPlayer
         ref={audioRef}
         autoPlay={false}
+        showJumpControls={false}
+        // defaultDuration={<RHAP_UI.DURATION />}
         src={src}
         layout="horizontal"
         className=""

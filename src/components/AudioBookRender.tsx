@@ -5,17 +5,19 @@ import AudioPlayerComp from "@/components/AudioPlayerComp";
 import "react-h5-audio-player/lib/styles.css";
 import { Button } from "./ui/button";
 import Chapter from "./Chapter";
-import { ArrowLeft, Menu } from "lucide-react";
+import { ArrowLeft, Menu, UserPen, ArrowRight, Music } from "lucide-react";
 import Sidebar from "./Sidebar";
 import { useSearchParams } from "next/navigation";
 import {
   Book,
   Chapter as ChapterType,
-  Paragraph,
+  Commentary,
+  Paragraph as ParagraphType,
   Section,
   Subsection,
   Verse,
 } from "@prisma/client";
+
 import {
   Select,
   SelectGroup,
@@ -26,7 +28,6 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 
-import { ArrowRight } from "lucide-react";
 import { useScriptStore, useSelectedTextTimeStore } from "@/utils/useStore";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 
@@ -36,15 +37,23 @@ interface AudioBookRenderProps {
 
 type BookWithRelations = Book & {
   chapters: (ChapterType & {
-    paragraphs: Paragraph[];
+    paragraphs: (ParagraphType & {
+      commentaries: Commentary[];
+      // paraIdRef: React.RefObject<any>;
+    })[];
     verses: Verse[];
     sections: (Section & {
-      subsections: (Subsection & {
-        paragraphs: (Paragraph & {
-          commentaries: any[];
-        })[];
+      paragraphs: (ParagraphType & {
+        commentaries: Commentary[];
+        // paraIdRef: React.RefObject<any>;
       })[];
       verses: Verse[];
+      subsections: (Subsection & {
+        paragraphs: (ParagraphType & {
+          commentaries: Commentary[];
+        })[];
+        verses: Verse[];
+      })[];
     })[];
   })[];
 };
@@ -52,40 +61,48 @@ type BookWithRelations = Book & {
 const scripts: {
   [key: string]: string;
 } = {
-  itrans: "ITRANS",
   devanagari: "Devanagari",
   iast: "IAST",
+  kannada: "Kannada",
+  telugu: "Telugu",
+  malayalam: "Malayalam",
+  bengali: "Bengali",
+  gujarati: "Gujarati",
+  oriya: "Oriya",
+  gurmukhi: "Gurmukhi",
+  itrans: "ITRANS",
   hk: "Harvard-Kyoto",
   slp1: "SLP1",
   velthuis: "Velthuis",
   wx: "WX",
-  kannada: "Kannada",
-  malayalam: "Malayalam",
-  tamil: "Tamil",
-  telugu: "Telugu",
-  bengali: "Bengali",
-  gurmukhi: "Gurmukhi",
-  gujarati: "Gujarati",
-  oriya: "Oriya",
+  // tamil: "Tamil",
 };
 
 const findChapterOrderById = (bookData: BookWithRelations, lineId: string) => {
   for (const chapter of bookData.chapters) {
     // Check paragraphs in the chapter
-    if (chapter.paragraphs.some((paragraph) => paragraph.id === lineId)) {
+    if (
+      chapter.paragraphs.some(
+        (paragraph: ParagraphType) => paragraph.id === lineId
+      )
+    ) {
       return chapter.order;
     }
     // Check verses in the chapter
-    if (chapter.verses.some((verse) => verse.id === lineId)) {
+    if (chapter.verses.some((verse: Verse) => verse.id === lineId)) {
       return chapter.order;
     }
     // Check paragraphs in sections and subsections
     for (const section of chapter.sections) {
-      if (section.paragraphs.some((paragraph) => paragraph.id === lineId)) {
+      if (
+        section.paragraphs.some(
+          (paragraph: ParagraphType) => paragraph.id === lineId
+        )
+      ) {
         return chapter.order;
       }
       // Check verses in sections and subsections
-      if (section.verses.some((verse) => verse.id === lineId)) {
+      if (section.verses.some((verse: Verse) => verse.id === lineId)) {
         return chapter.order;
       }
       // for (const subsection of section.subsections) {
@@ -109,7 +126,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   const { selectedTextTime, setSelectedTextTime } = useSelectedTextTimeStore();
 
   // console.log(script);
-  console.log("BookData: ", bookData);
+  // console.log("BookData: ", bookData);
 
   useEffect(() => {
     if (lineId) {
@@ -156,9 +173,9 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
         setSidebarActive={setSidebarActive}
       />
 
-      <main className="flex-1  max-w-5xl mx-auto lg:ml-64  ">
+      <main className="flex-1  max-w-5xl mx-auto lg:ml-64 ">
         <div className="mb-16">
-          <div className="flex gap-2 items-center justify-between mb-6 px-4 py-4 w-full">
+          <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-center justify-between px-4 py-8 lg-py-10 shadow-sm">
             <Button
               variant="ghost"
               size="icon"
@@ -169,13 +186,29 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             </Button>
             <span className="hidden lg:block">&nbsp;</span>
 
-            <div className="px-2 flex justify-center items-center gap-4 ">
+            <div className="px-2 flex flex-col justify-center items-center gap-4 ">
               <h2 className={`text-xl lg:text-2xl ${shobhikaBold.className} `}>
                 {bookData?.title}{" "}
               </h2>
 
-              <p className="text-sm">({bookData?.author})</p>
+              {bookData?.author !== "" && (
+                <div className="flex gap-2 items-center">
+                  <UserPen size={20} className="text-gray-700" />
+                  <p className="text-gray-700 text-lg">{bookData?.author}</p>
+                </div>
+              )}
+              {bookData?.chapters[currentChapterIndex].audios.length !== 0 && (
+                <div className="flex gap-2 items-center">
+                  <Music size={15} className="text-gray-600" />
+                  <p className="text-sm text-gray-600">
+                    {bookData?.chapters[currentChapterIndex].audios.map(
+                      (audio) => audio.author
+                    )}
+                  </p>
+                </div>
+              )}
             </div>
+
             <Select onValueChange={setScript} value={script}>
               <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder="Choose script" />
@@ -196,7 +229,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
           <div className="">
             <div className="flex justify-center">
               <Chapter
-                chapter={bookData?.chapters[currentChapterIndex]}
+                chapter={bookData?.chapters[currentChapterIndex]!}
                 scrollToLineId={lineId}
               />
             </div>
@@ -223,15 +256,17 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
           </div>
         </div>
         <div className="sticky bottom-0 w-full">
-          {bookData?.chapters[currentChapterIndex].audio && (
-            // <AudioPlayerComp
+          {bookData?.chapters[currentChapterIndex].audios[0]?.audioUrl && (
+            <AudioPlayerComp
+              src={
+                bookData.chapters[currentChapterIndex].audios[0].audioUrl || ""
+              }
+              chapter={bookData.chapters[currentChapterIndex]}
+            />
+            // <CustomAudioPlayer
             //   src={bookData.chapters[currentChapterIndex].audio || ""}
             //   chapter={bookData.chapters[currentChapterIndex]}
             // />
-            <CustomAudioPlayer
-              src={bookData.chapters[currentChapterIndex].audio || ""}
-              chapter={bookData.chapters[currentChapterIndex]}
-            />
           )}
         </div>
       </main>

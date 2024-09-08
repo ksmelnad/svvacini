@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
@@ -21,22 +20,23 @@ const Newsletter = () => {
     <div className="py-12 ">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold">
-            Stay Updated with us
-          </h2>
+          <h2 className="text-2xl font-semibold">Stay updated with us</h2>
           <p className="mt-3 max-w-2xl mx-auto  text-gray-500 sm:mt-4">
             Subscribe for news on Sanskrit Books and Audio Books additions
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row  justify-center items-center">
-          <div className="min-w-0 ">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 flex flex-col sm:flex-row  justify-center items-center"
+        >
+          <div className="">
             <Label htmlFor="email" className="sr-only">
               Email address
             </Label>
             <Input
               id="email"
               type="email"
-              className="max-w-sm"
+              className="w-64 "
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

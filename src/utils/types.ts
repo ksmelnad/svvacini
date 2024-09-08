@@ -10,10 +10,16 @@ import {
 
 export type BookWithRelations = Book & {
   chapters: (Chapter & {
-    paragraphs: Paragraph[];
+    paragraphs: (Paragraph & {
+      commentaries: Commentary[];
+      // paraIdRef: React.RefObject<any>;
+    })[];
     verses: Verse[];
     sections: (Section & {
-      paragraphs: Paragraph[];
+      paragraphs: (Paragraph & {
+        commentaries: Commentary[];
+        // paraIdRef: React.RefObject<any>;
+      })[];
       verses: Verse[];
       subsections: (Subsection & {
         paragraphs: (Paragraph & {

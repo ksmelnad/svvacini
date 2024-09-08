@@ -73,6 +73,7 @@ model Chapter {
   title     String
   order     Int
   chapterId String  @unique
+  audio String?
   audios    Audio[]
 
   book   Book   @relation("chapters", fields: [bookId], references: [id], onDelete: Cascade, onUpdate: Cascade)

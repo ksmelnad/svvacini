@@ -1,14 +1,21 @@
 import prisma from "@/utils/prismadb";
+import { Book } from "@prisma/client";
 import books from "@/data/books.json";
 import booksMeta from "@/data/books-meta/booksMeta.json";
 import AudioBookRender from "@/components/AudioBookRender";
 import { writeFile, writeFileSync } from "fs";
 import { BookWithRelations } from "@/utils/types";
 // import {Book } from "@prisma/client"
-
-interface StaticBook {
+interface BooksData {
+  name: string;
+  books: SingleBook[];
+}
+interface SingleBook {
   book: string;
   book_id: string;
+  category?: string;
+  author: string;
+  audio?: string;
 }
 
 const getBook = async (slug: string): Promise<BookWithRelations | null> => {
@@ -90,11 +97,19 @@ const getBook = async (slug: string): Promise<BookWithRelations | null> => {
 // export const fetchCache = "auto";
 
 export async function generateStaticParams() {
-  // Import the Book type from the correct module
+  const slugs: { slug: string }[] = [];
 
-  return books.map((book: StaticBook) => ({
-    slug: book.book_id,
-  }));
+  books.forEach((category: { books: SingleBook[] }) => {
+    category.books.forEach((book) => {
+      slugs.push({ slug: book.book_id });
+    });
+  });
+
+  return slugs;
+
+  // return books.map((booksData: BooksData) => ({
+  //   slug: booksData.books.map((book) => slug : book.book_id),
+  // }));
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {

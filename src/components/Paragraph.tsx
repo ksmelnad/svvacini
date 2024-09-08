@@ -4,7 +4,12 @@ import {
   useScriptStore,
   useSelectedTextTimeStore,
 } from "@/utils/useStore";
-import { Commentary, Line, Paragraph as ParagraphType } from "@prisma/client";
+
+import type {
+  Commentary,
+  Line,
+  Paragraph as ParagraphType,
+} from "@prisma/client";
 import React, { useEffect, useRef, useState } from "react";
 import Sanscript from "@/utils/sanscript";
 import { Button } from "./ui/button";
@@ -57,7 +62,7 @@ const Paragraph = ({ para, paraIdRef }: ParagraphProps) => {
         >
           {Sanscript.t(para.line.text, "devanagari", script)}
         </p>
-        {para.commentaries.length > 0 && (
+        {para.commentaries && para.commentaries.length > 0 && (
           <Button
             variant={isCommentary ? "ghost" : "ghost"}
             size={"icon"}

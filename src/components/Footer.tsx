@@ -12,10 +12,6 @@ const navitems = [
     title: "Anveṣiṇī",
     url: "/search",
   },
-  {
-    title: "Saṃvādinī",
-    url: "/samvadini",
-  },
 ];
 
 const otherLinks = [
@@ -24,21 +20,19 @@ const otherLinks = [
     url: "/about",
   },
   {
-    title: "Terms and Conditions",
-    url: "/terms",
-  },
-  {
-    title: "Privacy Policy",
-    url: "/privacy",
+    title: "Contact Us",
+    url: "/contact",
   },
 ];
 
 const Footer = () => {
   return (
-    <footer className="bg-[#c8c5bc] py-10 px-4 mt-8">
+    <footer className="bg-[#edeae1] py-10 px-4 mt-8">
       <div className="container mx-auto flex flex-col items-center md:flex-row gap-8 md:items-center md:justify-between">
         <div>
-          <h3 className="text-3xl font-bold tracking-wide">संस्कृतवाचिनी</h3>
+          <h3 className="text-3xl font-bold tracking-wide">
+            संस्कृतवाङ्मयवाचिनी
+          </h3>
         </div>
         <div>
           <ul className="flex flex-col gap-2 md:gap-4">
