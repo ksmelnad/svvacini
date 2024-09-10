@@ -1,13 +1,24 @@
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from dictapi.utils import dict_utils
 
 app = FastAPI()
 
-@app.get("/dict-api")
-def get_roots():
-    return {"message": "Roots are ---"}
+origins = ["http://localhost:3000", "https://svvacini.vercel.com"]
 
-@app.post("/dict-api")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/dictapi")
+def get_roots():
+    return {"message": "This is dictapi."}
+
+@app.post("/dictapi")
 async def create_root(request: Request):
     try:
         request_data = await request.json()

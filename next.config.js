@@ -6,7 +6,7 @@ const nextConfig = {
         source: "/dictapi/:path*",
         destination:
           process.env.NODE_ENV === "development"
-            ? "http://localhost:3000/dict-api/:path*"
+            ? "http://localhost:3000/dictapi/:path*"
             : "/dictapi/",
       },
     ];
