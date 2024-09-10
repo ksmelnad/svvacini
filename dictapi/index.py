@@ -4,7 +4,7 @@ from dictapi.utils import dict_utils
 
 app = FastAPI()
 
-origins = ["http://localhost:3000", "https://svvacini.vercel.com"]
+origins = ["http://localhost:3000", "https://svvacini.vercel.app"]
 
 app.add_middleware(
     CORSMiddleware,
