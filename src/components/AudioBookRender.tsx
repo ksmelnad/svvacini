@@ -30,6 +30,7 @@ import {
 
 import { useScriptStore, useSelectedTextTimeStore } from "@/utils/useStore";
 import CustomAudioPlayer from "./CustomAudioPlayer";
+import Dictionary from "./Dictionary";
 
 interface AudioBookRenderProps {
   bookData: BookWithRelations | null;
@@ -173,102 +174,112 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
         setSidebarActive={setSidebarActive}
       />
 
-      <main className="flex-1  max-w-5xl mx-auto lg:ml-64 ">
-        <div className="mb-16">
-          <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-center justify-between px-4 py-8 lg-py-10 shadow-sm">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden -ml-2 my-2"
-              onClick={() => setSidebarActive(!sidebarActive)}
-            >
-              <Menu />
-            </Button>
-            <span className="hidden lg:block">&nbsp;</span>
-
-            <div className="px-2 flex flex-col justify-center items-center gap-4 ">
-              <h2 className={`text-xl lg:text-2xl ${shobhikaBold.className} `}>
-                {bookData?.title}{" "}
-              </h2>
-
-              {bookData?.author !== "" && (
-                <div className="flex gap-2 items-center">
-                  <UserPen size={20} className="text-gray-700" />
-                  <p className="text-gray-700 text-lg">{bookData?.author}</p>
-                </div>
-              )}
-              {bookData?.chapters[currentChapterIndex].audios.length !== 0 && (
-                <div className="flex gap-2 items-center">
-                  <Music size={15} className="text-gray-600" />
-                  <p className="text-sm text-gray-600">
-                    {bookData?.chapters[currentChapterIndex].audios.map(
-                      (audio) => audio.author
-                    )}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <Select onValueChange={setScript} value={script}>
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Choose script" />
-              </SelectTrigger>
-              <SelectContent id="select-script">
-                <SelectGroup>
-                  <SelectLabel>Script</SelectLabel>
-                  {Object.keys(scripts).map((key) => (
-                    <SelectItem key={key} value={key}>
-                      {scripts[key]}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="">
-            <div className="flex justify-center">
-              <Chapter
-                chapter={bookData?.chapters[currentChapterIndex]!}
-                scrollToLineId={lineId}
-              />
-            </div>
-            <div className="py-2 md:py-3 flex justify-center items-center gap-4">
+      <main className="flex-1 lg:ml-64 flex justify-between gap-4">
+        <div className="flex-1">
+          <div className="mb-16">
+            <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-center justify-between px-4 py-8 lg-py-10 shadow-sm">
               <Button
-                variant="outline"
-                onClick={handlePreviousButton}
-                disabled={currentChapterIndex === 0}
-                className="flex gap-2 items-center"
+                variant="ghost"
+                size="icon"
+                className="lg:hidden -ml-2 my-2"
+                onClick={() => setSidebarActive(!sidebarActive)}
               >
-                <ArrowLeft size={16} /> <span>Previous</span>
+                <Menu />
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleNextButton}
-                disabled={
-                  currentChapterIndex === bookData?.chapters.length! - 1
+              <span className="hidden lg:block">&nbsp;</span>
+
+              <div className="px-2 flex flex-col justify-center items-center gap-4 ">
+                <h2
+                  className={`text-xl lg:text-2xl ${shobhikaBold.className} `}
+                >
+                  {bookData?.title}{" "}
+                </h2>
+
+                {bookData?.author !== "" && (
+                  <div className="flex gap-2 items-center">
+                    <UserPen size={20} className="text-gray-700" />
+                    <p className="text-gray-700 text-lg">{bookData?.author}</p>
+                  </div>
+                )}
+                {bookData?.chapters[currentChapterIndex].audios.length !==
+                  0 && (
+                  <div className="flex gap-2 items-center">
+                    <Music size={15} className="text-gray-600" />
+                    <p className="text-sm text-gray-600">
+                      {bookData?.chapters[currentChapterIndex].audios.map(
+                        (audio) => audio.author
+                      )}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <Select onValueChange={setScript} value={script}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="Choose script" />
+                </SelectTrigger>
+                <SelectContent id="select-script">
+                  <SelectGroup>
+                    <SelectLabel>Script</SelectLabel>
+                    {Object.keys(scripts).map((key) => (
+                      <SelectItem key={key} value={key}>
+                        {scripts[key]}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="">
+              <div className="flex justify-center">
+                <Chapter
+                  chapter={bookData?.chapters[currentChapterIndex]!}
+                  scrollToLineId={lineId}
+                />
+              </div>
+              <div className="py-2 md:py-3 flex justify-center items-center gap-4">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousButton}
+                  disabled={currentChapterIndex === 0}
+                  className="flex gap-2 items-center"
+                >
+                  <ArrowLeft size={16} /> <span>Previous</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleNextButton}
+                  disabled={
+                    currentChapterIndex === bookData?.chapters.length! - 1
+                  }
+                  className="flex gap-2 items-center"
+                >
+                  <span>Next</span> <ArrowRight size={16} />
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="sticky bottom-0 w-full">
+            {bookData?.chapters[currentChapterIndex].audios[0]?.audioUrl && (
+              <AudioPlayerComp
+                src={
+                  bookData.chapters[currentChapterIndex].audios[0].audioUrl ||
+                  ""
                 }
-                className="flex gap-2 items-center"
-              >
-                <span>Next</span> <ArrowRight size={16} />
-              </Button>
-            </div>
+                chapter={bookData.chapters[currentChapterIndex]}
+              />
+              // <CustomAudioPlayer
+              //   src={bookData.chapters[currentChapterIndex].audio || ""}
+              //   chapter={bookData.chapters[currentChapterIndex]}
+              // />
+            )}
           </div>
         </div>
-        <div className="sticky bottom-0 w-full">
-          {bookData?.chapters[currentChapterIndex].audios[0]?.audioUrl && (
-            <AudioPlayerComp
-              src={
-                bookData.chapters[currentChapterIndex].audios[0].audioUrl || ""
-              }
-              chapter={bookData.chapters[currentChapterIndex]}
-            />
-            // <CustomAudioPlayer
-            //   src={bookData.chapters[currentChapterIndex].audio || ""}
-            //   chapter={bookData.chapters[currentChapterIndex]}
-            // />
-          )}
-        </div>
+        {/* Dictionary */}
+        {/* <div className="max-w-md">
+          <Dictionary />
+        </div> */}
       </main>
     </div>
   );

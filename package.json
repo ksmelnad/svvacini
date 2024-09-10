@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "next-dev": "next dev",
+    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn dictapi.index:app --reload",
+    "dev": "concurrently \"pnpm run next-dev\" \"pnpm run fastapi-dev\"",
+    "build": "next build && pip3 install -r requirements.txt && python3 -m uvicorn dictapi.index:app --reload",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"
@@ -34,6 +36,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "concurrently": "^9.0.0",
     "eslint": "9.9.1",
     "eslint-config-next": "14.2.7",
     "konva": "^9.3.14",
