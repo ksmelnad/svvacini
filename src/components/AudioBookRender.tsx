@@ -28,9 +28,15 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 
-import { useScriptStore, useSelectedTextTimeStore } from "@/utils/useStore";
+import {
+  useDictionaryStore,
+  useScriptStore,
+  useSelectedTextTimeStore,
+} from "@/utils/useStore";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import Dictionary from "./Dictionary";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
 
 interface AudioBookRenderProps {
   bookData: BookWithRelations | null;
@@ -125,6 +131,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
 
   const { script, setScript } = useScriptStore();
   const { selectedTextTime, setSelectedTextTime } = useSelectedTextTimeStore();
+  const { isDictionaryActive, setIsDictionaryActive } = useDictionaryStore();
 
   // console.log(script);
   // console.log("BookData: ", bookData);
@@ -213,22 +220,32 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                   </div>
                 )}
               </div>
+              <div className="flex flex-col gap-2 items-center">
+                <div className="flex gap-2 items-center">
+                  <Label htmlFor="dictionary-switch">Dictionary</Label>
+                  <Switch
+                    id="dictionary-switch"
+                    checked={isDictionaryActive}
+                    onCheckedChange={setIsDictionaryActive}
+                  />
+                </div>
 
-              <Select onValueChange={setScript} value={script}>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="Choose script" />
-                </SelectTrigger>
-                <SelectContent id="select-script">
-                  <SelectGroup>
-                    <SelectLabel>Script</SelectLabel>
-                    {Object.keys(scripts).map((key) => (
-                      <SelectItem key={key} value={key}>
-                        {scripts[key]}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                <Select onValueChange={setScript} value={script}>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Choose script" />
+                  </SelectTrigger>
+                  <SelectContent id="select-script">
+                    <SelectGroup>
+                      <SelectLabel>Script</SelectLabel>
+                      {Object.keys(scripts).map((key) => (
+                        <SelectItem key={key} value={key}>
+                          {scripts[key]}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="">

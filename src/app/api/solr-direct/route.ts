@@ -6,7 +6,7 @@ export async function POST(request: Request) {
 
   try {
     const { queryString, texts } = await request.json();
-    console.log(queryString, texts);
+    // console.log(queryString, texts);
 
     // Encode the Devanagari query string for URL safety
     const encodedQueryString = encodeURIComponent(queryString);
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     // console.log(data);
     return NextResponse.json(data);
   } catch (error) {

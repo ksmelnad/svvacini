@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
   try {
     const { queryString, texts } = await request.json();
-    console.log(queryString, texts);
+    // console.log(queryString, texts);
 
     const query = client
       .query()
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       .rows(200);
 
     const obj = await client.search(query);
-    console.log(obj);
+    // console.log(obj);
 
     return NextResponse.json(obj);
   } catch (error) {
