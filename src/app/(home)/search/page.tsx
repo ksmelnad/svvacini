@@ -25,7 +25,7 @@ interface Docs {
   book_title: string;
   book_id: string;
   line: string;
-  // word_id: string;
+  line_id: string;
   _version_: number;
 }
 
@@ -229,7 +229,7 @@ function Search() {
         // }));
 
         // setDocs(transformedDocs);
-
+        console.log("Docs:", docs);
         setDocs(docs);
         setIsSarvam(true);
         // setFilteredDocs(transformedDocs);
@@ -252,15 +252,15 @@ function Search() {
         // console.log("Sorted Docs", filteredDocs);
         return;
       }
-      // if (sort === "order") {
-      //   const sortingDocs = [...filteredDocs].sort((a, b) => {
-      //     const refA = Number(refNumber(a.word_id[0])[1]);
-      //     const refB = Number(refNumber(b.word_id[0])[1]);
-      //     return refA - refB;
-      //   });
-      //   setSortedDocs(filteredDocs); // ??? Temp
-      //   return;
-      // }
+      if (sort === "order") {
+        const sortingDocs = [...sortedDocs].sort((a, b) => {
+          const refA = Number(refNumber(a.line_id[0])[1]);
+          const refB = Number(refNumber(b.line_id[0])[1]);
+          return refA - refB;
+        });
+        setSortedDocs(sortingDocs); // ??? Temp
+        return;
+      }
       if (sort === "relevance") {
         setSortedDocs(filteredDocs);
         return;

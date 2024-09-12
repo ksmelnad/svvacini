@@ -193,7 +193,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
       <main className="flex-1 lg:ml-64">
         <div className="flex-1">
           <div className="mb-16">
-            <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-center justify-between px-4 py-8 lg:py-10 shadow-sm">
+            <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-start justify-between px-4 pb-10 pt-4 shadow-sm">
               {/* <Button
                 variant="ghost"
                 size="icon"
@@ -218,6 +218,9 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                         <h3 className="px-4 text-xl py-4 mt-4">अनुक्रमणिका</h3>
                       </SheetClose>
                     </SheetTitle>
+                    <SheetDescription>
+                      <span></span>
+                    </SheetDescription>
                   </SheetHeader>
                   <ul className="pl-6 pr-4 pt-4 space-y-4">
                     {bookData?.chapters &&
@@ -227,11 +230,11 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                             <SheetClose>
                               <button
                                 className={`block text-left text-sm hover:text-red-700 transition-colors
-              ${
-                currentChapterIndex === chIndex
-                  ? "text-red-700 font-semibold"
-                  : ""
-              }`}
+                                  ${
+                                    currentChapterIndex === chIndex
+                                      ? "text-red-700 font-semibold"
+                                      : ""
+                                  }`}
                                 onClick={() => {
                                   setSelectedTextTime(0);
                                   setCurrentChapterIndex(chIndex);
@@ -272,7 +275,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
               </Sheet>
               <span className="hidden lg:block">&nbsp;</span>
 
-              <div className="px-2 flex flex-col justify-center items-center gap-4 ">
+              <div className="px-2 flex flex-col justify-center items-center space-y-3 mt-2">
                 <h2
                   className={`text-xl lg:text-2xl ${shobhikaBold.className} `}
                 >
@@ -297,7 +300,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col gap-2 items-center">
+              <div className="flex flex-col gap-2 items-center mt-2">
                 <div className="flex gap-2 items-center">
                   <Label htmlFor="dictionary-switch">Dictionary</Label>
                   <Switch
@@ -326,12 +329,13 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             </div>
 
             <div className="">
-              <div className="">
+              <div className="flex justify-center">
                 <Chapter
                   chapter={bookData?.chapters[currentChapterIndex]!}
                   scrollToLineId={lineId}
                 />
               </div>
+
               <div className="py-2 md:py-3 flex justify-center items-center gap-4">
                 <Button
                   variant="outline"

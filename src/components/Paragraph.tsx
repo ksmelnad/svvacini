@@ -1,6 +1,7 @@
 "use client";
 import {
   useCurrentTimeStore,
+  useDictionaryStore,
   useScriptStore,
   useSelectedTextTimeStore,
 } from "@/utils/useStore";
@@ -20,6 +21,7 @@ import {
   PlayCircle,
   PlusIcon,
 } from "lucide-react";
+import DialogDictionary from "./DialogDictionary";
 
 interface ParagraphProps {
   para: ParagraphType & {
@@ -38,6 +40,7 @@ const Paragraph = ({ para, paraIdRef }: ParagraphProps) => {
   const { script } = useScriptStore();
   const { setSelectedTextTime } = useSelectedTextTimeStore();
   const [isCommentary, setIsCommentary] = useState(false);
+  const { isDictionaryActive } = useDictionaryStore();
 
   useEffect(() => {
     if (isActive && paraIdRef?.current) {
@@ -51,17 +54,28 @@ const Paragraph = ({ para, paraIdRef }: ParagraphProps) => {
   return (
     <div>
       <div className="flex items-center gap-4">
-        <p
-          id={para.id}
-          key={para.id}
-          ref={paraIdRef}
-          className={`ml-2 md:ml-4  cursor-pointer ${
-            isActive ? "py-4 text-xl text-red-700" : "py-2 text-lg"
-          }`}
-          onClick={() => setSelectedTextTime(parseFloat(para.line.begin))}
-        >
-          {Sanscript.t(para.line.text, "devanagari", script)}
-        </p>
+        {isDictionaryActive ? (
+          <div className="ml-2 md:ml-4 py-2 lg:text-lg">
+            {para.line.text.split(/\s+/).map((word, index) => (
+              <DialogDictionary key={index.toString()} word={word} />
+            ))}
+          </div>
+        ) : (
+          <p
+            id={para.id}
+            key={para.id}
+            ref={paraIdRef}
+            className={`ml-2 md:ml-4  cursor-pointer break-all ${
+              isActive ? "py-4 text-xl text-red-700" : "py-2 text-lg"
+            }`}
+            onClick={() => setSelectedTextTime(parseFloat(para.line.begin))}
+          >
+            {script !== "devanagari"
+              ? Sanscript.t(para.line.text, "devanagari", script)
+              : para.line.text}
+          </p>
+        )}
+
         {para.commentaries && para.commentaries.length > 0 && (
           <Button
             variant={isCommentary ? "ghost" : "ghost"}
@@ -81,8 +95,8 @@ const Paragraph = ({ para, paraIdRef }: ParagraphProps) => {
             {/* <audio src={commentary.audio} */}
             <p key={index} className="leading-loose">
               {commentary.lines.map((line: Line, index: number) => (
-                <span key={index}>
-                  {line.text.replace(/ *(॥|।) */g, " $1 ")}
+                <span key={index} className="break-all">
+                  {line.text.replace(/ *(॥|।|\?) */g, "\u00A0$1 ")}
                 </span>
               ))}
             </p>

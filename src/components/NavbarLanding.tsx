@@ -146,6 +146,9 @@ async function NavbarLanding() {
                   </Link>
                 </SheetClose>
               </SheetTitle>
+              <SheetDescription>
+                <span> </span>
+              </SheetDescription>
             </SheetHeader>
             <Separator />
 

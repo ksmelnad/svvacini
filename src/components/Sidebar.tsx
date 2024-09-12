@@ -67,7 +67,7 @@ function Sidebar({
     <aside
       className={`${
         sidebarActive ? "ml-0" : "-ml-64 lg:ml-0"
-      } bg-[#edeae1] fixed top-18 left-2 bottom-2 z-30 h-[calc(100vh-5rem)] rounded-md shadow-md w-60 
+      } bg-[#edeae1] overflow-y-auto fixed top-18 left-2 bottom-2 z-30 h-[calc(100vh-5rem)] rounded-md shadow-md w-60 
   transition-[margin-left] ease-in-out duration-500
   
   ${shobhika.className} `}

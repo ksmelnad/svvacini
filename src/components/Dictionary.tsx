@@ -79,7 +79,7 @@ const Dictionary = ({
 
   return (
     <div className="py-2">
-      <div className="flex justify-between my-2">
+      <div className="flex justify-between items-center my-2">
         <p className="text-lg text-red-700">{word}</p>
         <Select onValueChange={handleChangeDictionary} value={dictionary}>
           <SelectTrigger className="w-[180px]">
@@ -110,7 +110,7 @@ const Dictionary = ({
             dangerouslySetInnerHTML={{
               __html: targetCologneBasicContent,
             }}
-            className={`test h-96 overflow-y-auto overflow-x-hidden`}
+            className={`max-h-[250px] overflow-y-auto overflow-x-hidden`}
           />
           <style jsx global>{`
             /* Applying custom style to the sdata_siddhanta class */

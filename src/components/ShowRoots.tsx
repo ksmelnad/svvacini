@@ -64,7 +64,7 @@ const ShowRoots = ({ query }: { query: string }) => {
             <span
               className={
                 selectedDictionary === "apte" || selectedDictionary === "shabda"
-                  ? "hover:cursor-pointer text-blue-400 hover:underline"
+                  ? "hover:cursor-pointer text-[#008080] hover:underline"
                   : ""
               }
               onClick={
@@ -79,7 +79,7 @@ const ShowRoots = ({ query }: { query: string }) => {
             <span
               className={
                 selectedDictionary !== "apte" && selectedDictionary !== "shabda"
-                  ? "hover:cursor-pointer text-blue-400 hover:underline"
+                  ? "hover:cursor-pointer text-[#008080] hover:underline"
                   : ""
               }
               onClick={

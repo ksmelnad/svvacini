@@ -20,6 +20,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import ShowRoots from "./ShowRoots";
+import DialogDictionary from "./DialogDictionary";
 
 interface LineProps {
   lineId: string;
@@ -44,9 +45,14 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
 
   // Memoized transliterated text to avoid recalculations on every render
   const formattedText = useMemo(() => {
-    const rawText = line.text.replace(/ *(॥|।)/g, " $1 ");
+    const rawText = line.text.replace(/ *(॥|।)/g, "\u00A0$1 ");
     const textArray = rawText.split("\n");
-    return textArray.map((text) => Sanscript.t(text, "devanagari", script));
+
+    if (script !== "devanagari") {
+      return textArray.map((text) => Sanscript.t(text, "devanagari", script));
+    }
+
+    return textArray;
   }, [line.text, script]);
 
   // Smooth scroll when line becomes active
@@ -68,43 +74,14 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
       {isDictionaryActive ? (
         <div className="ml-2 md:ml-4 py-2 lg:text-lg">
           {formattedText.map((text, textIdx) => {
-            return text.split(/\s+/).map((word, wordIdx) => (
-              <Dialog key={textIdx + wordIdx}>
-                <DialogTrigger asChild>
-                  <span className="hover:underline hover:text-green-500 hover:cursor-pointer">
-                    {" "}
-                    {word}
-                  </span>
-                </DialogTrigger>
-                <DialogContent className="sm:w-[800px] sm:max-h-[90vh]">
-                  <DialogHeader>
-                    <DialogTitle>Analysis and Dictionary Look Up</DialogTitle>
-                    <DialogDescription>
-                      Root forms are obtained from the{" "}
-                      <a
-                        className="text-blue-400 hover:underline"
-                        href="https://sanskrit.inria.fr/DICO/reader.fr.html"
-                        target="_blank"
-                      >
-                        Sanskrit Reader Companion
-                      </a>{" "}
-                      and Dictionaries from{" "}
-                      <a
-                        className="text-blue-400 hover:underline"
-                        href="https://www.sanskrit-lexicon.uni-koeln.de/"
-                        target="_blank"
-                      >
-                        Cologne Digital Sanskrit Dictionaries.
-                      </a>
-                    </DialogDescription>
-                    <div>
-                      <p className="my-2 text-lg text-red-700">{word}</p>
-                      <ShowRoots query={word} />
-                    </div>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            ));
+            return text
+              .split(/\s+/)
+              .map((word, wordIdx) => (
+                <DialogDictionary
+                  key={textIdx.toString() + wordIdx.toString()}
+                  word={word}
+                />
+              ));
           })}
         </div>
       ) : (
