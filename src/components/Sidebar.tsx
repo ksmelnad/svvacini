@@ -67,12 +67,12 @@ function Sidebar({
     <aside
       className={`${
         sidebarActive ? "ml-0" : "-ml-64 lg:ml-0"
-      } bg-[#edeae1] fixed top-18 left-2 bottom-2 h-[calc(100vh-5rem)] rounded-md shadow-md w-60 
-  transition-[margin-left] ease-in-out duration-500  z-40
+      } bg-[#edeae1] fixed top-18 left-2 bottom-2 z-30 h-[calc(100vh-5rem)] rounded-md shadow-md w-60 
+  transition-[margin-left] ease-in-out duration-500
   
   ${shobhika.className} `}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center z-40">
         <h3 className="px-4 text-xl py-4 mt-4">अनुक्रमणिका</h3>
         <Button
           variant="ghost"

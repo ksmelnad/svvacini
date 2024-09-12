@@ -27,7 +27,7 @@ const Audiobook = () => {
                 <Link
                   key={book.book_id}
                   href={`/audiobooks/${book.book_id}`}
-                  className="px-4 py-6 rounded border hover:border-gray-300 hover:bg-[#f0eee2]/80 flex flex-col gap-4 items-center 
+                  className="px-4 py-6 rounded border bg-[#f0eee2]/50  hover:border-primary hover:bg-[#f0eee2]/80 flex flex-col gap-4 items-center 
             transition ease-in-out duration-300
             "
                 >

@@ -279,7 +279,7 @@ function Search() {
       }
       setIsSarvam(false);
 
-      setFilteredDocs(
+      setSortedDocs(
         docs.filter((docItem) => docItem.book_title[0] === selectedText)
       );
     };
@@ -388,14 +388,12 @@ function Search() {
           <div className="max-w-5xl mx-auto flex flex-col gap-4 py-4">
             {docs.length !== 0 && printDocs()}
             {docs.length !== 0 && (
-              <div className="flex justify-between items-center px-4">
-                <p className="text-green-500 py-2">
-                  फलितांशः (Result) : {filteredDocs.length}
-                </p>
+              <div className="">
+                <p className="py-2">फलितांशः (Result) : {sortedDocs.length}</p>
                 <div className="flex gap-4">
                   {!isSarvam && (
                     <div className="flex justify-end gap-4 items-center">
-                      <Label htmlFor="select-order">Sort by</Label>
+                      {/* <Label htmlFor="select-order">Sort by</Label> */}
                       <Select onValueChange={(e) => setSort(e)} value={sort}>
                         <SelectTrigger className="w-[180px]">
                           <SelectValue />
@@ -469,14 +467,14 @@ function Search() {
   };
 
   return (
-    <div className="p-4">
+    <div className="px-2 py-4 lg:p-4">
       <div className="max-w-5xl mx-auto ">
         <div className="max-w-5xl mx-auto flex items-center justify-between py-2">
           {/* <div>
           <h1 style={{ color: "#a70e0e" }}>संस्कृतवाङ्मयान्वेषणम्</h1>
         </div> */}
         </div>
-        <div className="border bg-[#efe7d6] p-4 rounded">
+        <div className="bg-[#edeae1] p-4 rounded-md shadow-sm">
           <div className="flex gap-4 items-center">
             {/* <p>{isAiBharat ? "Indic Transliteration" : "Transliteration"}</p> */}
             <p>Indic Transliteration</p>

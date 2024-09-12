@@ -79,7 +79,7 @@ const Chapter = ({
   // console.log(scrollToLineId, verseRefs[scrollToLineId!].current);
 
   return (
-    <div className={`${shobhika.className} px-4`}>
+    <div className={`${shobhika.className} px-4 mt-6`}>
       <h2
         className={`text-xl lg:text-2xl font-bold text-red-800 pb-2 border-b border-gray-300 ${shobhikaBold.className} `}
       >

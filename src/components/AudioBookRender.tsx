@@ -27,6 +27,15 @@ import {
   SelectValue,
   SelectLabel,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetClose,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 import {
   useDictionaryStore,
@@ -181,18 +190,86 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
         setSidebarActive={setSidebarActive}
       />
 
-      <main className="flex-1 lg:ml-64 flex justify-between gap-4">
+      <main className="flex-1 lg:ml-64">
         <div className="flex-1">
           <div className="mb-16">
-            <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-center justify-between px-4 py-8 lg-py-10 shadow-sm">
-              <Button
+            <div className="bg-[#edeae1] rounded-md m-2 flex gap-2 items-center justify-between px-4 py-8 lg:py-10 shadow-sm">
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 className="lg:hidden -ml-2 my-2"
                 onClick={() => setSidebarActive(!sidebarActive)}
               >
                 <Menu />
-              </Button>
+              </Button> */}
+              <Sheet>
+                <SheetTrigger asChild className="lg:hidden">
+                  <Button variant="ghost" size="icon" className="lg:hidden">
+                    <Menu />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="left"
+                  className={`left-2 ${shobhika.className}`}
+                >
+                  <SheetHeader>
+                    <SheetTitle>
+                      <SheetClose asChild className="flex justify-center">
+                        <h3 className="px-4 text-xl py-4 mt-4">अनुक्रमणिका</h3>
+                      </SheetClose>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <ul className="pl-6 pr-4 pt-4 space-y-4">
+                    {bookData?.chapters &&
+                      bookData?.chapters.map(
+                        (chapter: any, chIndex: number) => (
+                          <li key={chapter.id}>
+                            <SheetClose>
+                              <button
+                                className={`block text-left text-sm hover:text-red-700 transition-colors
+              ${
+                currentChapterIndex === chIndex
+                  ? "text-red-700 font-semibold"
+                  : ""
+              }`}
+                                onClick={() => {
+                                  setSelectedTextTime(0);
+                                  setCurrentChapterIndex(chIndex);
+
+                                  // setSidebarActive(false);
+                                }}
+                              >
+                                {chapter.title}
+                              </button>
+                            </SheetClose>
+                            {chapter.sections.map(
+                              (section: any, index: number) => (
+                                <ul
+                                  key={section.id}
+                                  className="block text-left pt-2 px-3 space-y-3 border-l border-l-gray-200"
+                                >
+                                  <li key={section.id} className="">
+                                    <button
+                                      className="text-sm hover:text-red-700 transition-colors"
+                                      onClick={() => {
+                                        setSelectedTextTime(0);
+                                        setCurrentChapterIndex(chIndex);
+
+                                        // setSidebarActive(false);
+                                      }}
+                                    >
+                                      {section.title}
+                                    </button>
+                                  </li>
+                                </ul>
+                              )
+                            )}
+                          </li>
+                        )
+                      )}
+                  </ul>
+                </SheetContent>
+              </Sheet>
               <span className="hidden lg:block">&nbsp;</span>
 
               <div className="px-2 flex flex-col justify-center items-center gap-4 ">
@@ -249,7 +326,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             </div>
 
             <div className="">
-              <div className="flex justify-center">
+              <div className="">
                 <Chapter
                   chapter={bookData?.chapters[currentChapterIndex]!}
                   scrollToLineId={lineId}
@@ -293,10 +370,6 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             )}
           </div>
         </div>
-        {/* Dictionary */}
-        {/* <div className="max-w-md">
-          <Dictionary />
-        </div> */}
       </main>
     </div>
   );
