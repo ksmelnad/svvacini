@@ -72,7 +72,7 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
   return (
     <div>
       {isDictionaryActive ? (
-        <div className="ml-2 md:ml-4 py-2 lg:text-lg">
+        <div className="ml-2 md:ml-4 lg:text-lg ">
           {formattedText.map((text, textIdx) => {
             return text
               .split(/\s+/)
@@ -89,15 +89,14 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
           id={lineId}
           key={index}
           ref={lineRef}
-          className={`ml-2 md:ml-4 cursor-pointer ${
-            isActive ? "py-4 text-xl text-red-700" : "py-2 lg:text-lg"
+          className={`ml-2 md:ml-4 cursor-pointer flex flex-col ${
+            isActive ? " text-xl text-red-700" : " lg:text-lg"
           }`}
           onClick={handleLineClick}
         >
           {formattedText.map((text, idx) => (
-            <span key={idx}>
+            <span key={idx} className="">
               {text}
-              <br />
             </span>
           ))}
         </p>

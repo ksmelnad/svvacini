@@ -431,7 +431,10 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                         .audioUrl || ""
                     : bookData.chapters[currentChapterIndex].audios[
                         Number(selectedAudioIndex)
-                      ].audioUrl || ""
+                      ].audioUrl ||
+                      bookData.chapters[currentChapterIndex].audios[0]
+                        .audioUrl ||
+                      ""
                 }
                 chapter={bookData.chapters[currentChapterIndex]}
               />
