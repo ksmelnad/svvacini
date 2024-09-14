@@ -15,6 +15,7 @@ import {
 import Paragraph from "./Paragraph";
 import Line from "./Line";
 import { useRouter } from "next/navigation";
+import alternateChapterData from "@/data/alternateChapterAudios.json";
 
 type ChapterWithRelations = ChapterType & {
   paragraphs: (ParagraphType & {
@@ -46,19 +47,26 @@ interface ParagraphProps {
 const Chapter = ({
   chapter,
   scrollToLineId,
+  selectedAudioIndex,
 }: {
   chapter: ChapterWithRelations;
   scrollToLineId: string | null;
+  selectedAudioIndex: string;
 }) => {
   const paragraphRefs: { [key: string]: React.RefObject<any> } = useRef(
     {}
   ).current;
 
   const verseRefs: { [key: string]: React.RefObject<any> } = useRef({}).current;
-
+  const [altChapter, setAltChapter] = useState<ChapterWithRelations>(
+    {} as ChapterWithRelations
+  );
   // const router = useRouter();
   // console.log(scrollToLineId);
   // console.log("Chapter", chapter);
+
+  const [recievedSelectedAudioIndex, setRecievedSelectedAudioIndex] =
+    useState(selectedAudioIndex);
 
   useEffect(() => {
     setTimeout(() => {
@@ -77,6 +85,39 @@ const Chapter = ({
   }, [scrollToLineId, verseRefs]);
 
   // console.log(scrollToLineId, verseRefs[scrollToLineId!].current);
+
+  useEffect(() => {
+    if (selectedAudioIndex === "1") {
+      console.log("UseEffect");
+      const updatedVerses = chapter.verses.map((verse, index) => {
+        console.log("Verse", verse);
+        const alternateVerse = alternateChapterData.find(
+          (altVerse) => altVerse.order === verse.order
+        );
+        console.log(alternateVerse);
+        if (alternateVerse) {
+          return {
+            id: verse.id,
+            order: verse.order,
+            chapterId: verse.chapterId,
+            sectionId: verse.sectionId,
+            subsectionId: verse.subsectionId,
+            lines: alternateVerse.lines,
+          };
+        } else {
+          return verse;
+        }
+      });
+      setAltChapter({ ...chapter, verses: updatedVerses });
+    }
+  }, [selectedAudioIndex, chapter]);
+
+  useEffect(() => {
+    setRecievedSelectedAudioIndex(selectedAudioIndex);
+  }, [selectedAudioIndex]);
+
+  console.log("selectedAudioIndex", selectedAudioIndex);
+  console.log("AltChapter also alternative", altChapter);
 
   return (
     <div className={`${shobhika.className} px-4 mt-6`}>
@@ -99,26 +140,53 @@ const Chapter = ({
           />
         );
       })}
-      {chapter.verses?.map((verse: Verse) => {
-        return (
-          <div id={verse.id} key={verse.id} className="py-2 md:py-3">
-            {verse.lines.map((line: LineType, index: number) => {
-              if (line && !verseRefs[verse.id + index]) {
-                verseRefs[verse.id + index] = React.createRef();
-              }
-              return (
-                <Line
-                  lineId={verse.id}
-                  key={index}
-                  line={line}
-                  index={index}
-                  lineRef={verseRefs[verse.id + index]}
-                />
-              );
-            })}
-          </div>
-        );
-      })}
+      {recievedSelectedAudioIndex !== "1" ? (
+        <div>
+          {chapter.verses?.map((verse: Verse) => {
+            return (
+              <div id={verse.id} key={verse.id} className="py-2 md:py-3">
+                {verse.lines.map((line: LineType, index: number) => {
+                  if (line && !verseRefs[verse.id + index]) {
+                    verseRefs[verse.id + index] = React.createRef();
+                  }
+                  return (
+                    <Line
+                      lineId={verse.id}
+                      key={index}
+                      line={line}
+                      index={index}
+                      lineRef={verseRefs[verse.id + index]}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div>
+          {altChapter.verses?.map((verse: Verse) => {
+            return (
+              <div id={verse.id} key={verse.id} className="py-2 md:py-3">
+                {verse.lines.map((line: LineType, index: number) => {
+                  if (line && !verseRefs[verse.id + index]) {
+                    verseRefs[verse.id + index] = React.createRef();
+                  }
+                  return (
+                    <Line
+                      lineId={verse.id}
+                      key={index}
+                      line={line}
+                      index={index}
+                      lineRef={verseRefs[verse.id + index]}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}{" "}
+        </div>
+      )}
 
       {chapter.sections?.map((section) => {
         return (

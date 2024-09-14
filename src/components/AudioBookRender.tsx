@@ -36,6 +36,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import {
   useDictionaryStore,
@@ -45,7 +47,7 @@ import {
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import Dictionary from "./Dictionary";
 import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
+import CustomAudioPlayerTwo from "./CustomAudioPlayerTwo";
 
 interface AudioBookRenderProps {
   bookData: BookWithRelations | null;
@@ -131,9 +133,24 @@ const findChapterOrderById = (bookData: BookWithRelations, lineId: string) => {
   throw new Error(`ID not found`);
 };
 
+interface AudioData {
+  author: string;
+  audioUrl: string;
+}
+
 const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [sidebarActive, setSidebarActive] = useState(false);
+  const [audioData, setAudioData] = useState<AudioData[] | undefined>(
+    bookData?.chapters[currentChapterIndex].audios
+  );
+  const [selectedAudioIndex, setSelectedAudioIndex] = useState("0");
+
+  console.log(
+    "audioUrl",
+    bookData?.chapters[currentChapterIndex].audios[Number(selectedAudioIndex)]
+      .audioUrl
+  );
 
   const searchParams = useSearchParams();
   const lineId = searchParams.get("lineId");
@@ -152,6 +169,14 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
       // console.log(chapterOder - 1);
     }
   }, [bookData, lineId]);
+
+  useEffect(() => {
+    if (bookData?.chapters.length) {
+      const chapter = bookData?.chapters[currentChapterIndex];
+      const audioData = chapter?.audios;
+      setAudioData(audioData);
+    }
+  }, [currentChapterIndex, bookData]);
 
   //   console.log(currentTime);
   //   console.log("Content type:", typeof content);
@@ -288,7 +313,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                     <p className="text-gray-700 text-lg">{bookData?.author}</p>
                   </div>
                 )}
-                {bookData?.chapters[currentChapterIndex].audios.length !==
+                {/* {bookData?.chapters[currentChapterIndex].audios.length !==
                   0 && (
                   <div className="flex gap-2 items-center">
                     <Music size={15} className="text-gray-600" />
@@ -298,6 +323,44 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                       )}
                     </p>
                   </div>
+                )} */}
+                {bookData?.chapters[currentChapterIndex].audios.length !== 0 &&
+                bookData?.chapters[currentChapterIndex].audios.length === 1 ? (
+                  <div className="flex gap-2 items-center">
+                    <Music size={15} className="text-gray-600" />
+                    <p className="text-sm text-gray-600">
+                      {bookData?.chapters[currentChapterIndex].audios.map(
+                        (audio) => audio.author
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <RadioGroup
+                    defaultValue={selectedAudioIndex}
+                    onValueChange={(value) => setSelectedAudioIndex(value)}
+                  >
+                    {bookData?.chapters[currentChapterIndex].audios.map(
+                      (audio, index) => (
+                        <div
+                          key={audio.audioUrl}
+                          className="flex items-center space-x-2"
+                        >
+                          <RadioGroupItem
+                            value={index.toString()}
+                            id={audio.author}
+                            checked={selectedAudioIndex === index.toString()}
+                          />
+                          <Label
+                            className="text-sm text-gray-600 flex items-center gap-2"
+                            htmlFor={audio.author}
+                          >
+                            <Music size={15} className="text-gray-600" />
+                            <span>{audio.author}</span>
+                          </Label>
+                        </div>
+                      )
+                    )}
+                  </RadioGroup>
                 )}
               </div>
               <div className="flex flex-col gap-2 items-center mt-2">
@@ -332,6 +395,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
               <div className="flex justify-center">
                 <Chapter
                   chapter={bookData?.chapters[currentChapterIndex]!}
+                  selectedAudioIndex={selectedAudioIndex}
                   scrollToLineId={lineId}
                 />
               </div>
@@ -362,12 +426,16 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
             {bookData?.chapters[currentChapterIndex].audios[0]?.audioUrl && (
               <AudioPlayerComp
                 src={
-                  bookData.chapters[currentChapterIndex].audios[0].audioUrl ||
-                  ""
+                  selectedAudioIndex !== "1"
+                    ? bookData.chapters[currentChapterIndex].audios[0]
+                        .audioUrl || ""
+                    : bookData.chapters[currentChapterIndex].audios[
+                        Number(selectedAudioIndex)
+                      ].audioUrl || ""
                 }
                 chapter={bookData.chapters[currentChapterIndex]}
               />
-              // <CustomAudioPlayer
+              // <CustomAudioPlayerTwo
               //   src={bookData.chapters[currentChapterIndex].audio || ""}
               //   chapter={bookData.chapters[currentChapterIndex]}
               // />

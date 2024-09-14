@@ -34,6 +34,7 @@ import {
   useSelectedTextTimeStore,
 } from "@/utils/useStore";
 import CustomAudioPlayer from "./CustomAudioPlayer";
+import { Input } from "./ui/input";
 
 type BookWithRelations = Book & {
   chapters: (ChapterType & {
@@ -64,6 +65,7 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({ src, chapter }) => {
   const [currentRepeat, setCurrentRepeat] = useState(1);
   const [contentIndex, setContentIndex] = useState(0);
   const [isRepeatActive, setIsRepeatActive] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [repeatMode, setRepeatMode] = useState<
     "verse" | "paragraph" | "range" | "chapter"
   >("verse");
@@ -229,69 +231,34 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({ src, chapter }) => {
 
   // console.log(currentTime);
 
-  const RepeatControls = () => {
-    return (
-      <Popover>
-        <PopoverTrigger className="relative">
-          <Repeat color={isRepeatActive ? "black" : "gray"} size={25} />
-          {isRepeatActive && (
-            <span className="absolute bottom-0 -right-2 bg-[#f0eee2] p-2 rounded-full w-4 h-4 flex items-center justify-center">
-              {repeatCount}
-            </span>
-          )}
-        </PopoverTrigger>
-        <PopoverContent className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center justify-between">
-            <p>Repeat each</p>
-            <div className="flex gap-2 items-center">
-              <Button
-                disabled={repeatCount === 2}
-                variant="ghost"
-                size="icon"
-                onClick={() => setRepeatCount(Math.max(repeatCount - 1, 2))}
-              >
-                {" "}
-                <MinusIcon />{" "}
-              </Button>
-              {repeatCount}
-              <Button
-                disabled={repeatCount === 5}
-                variant="ghost"
-                size="icon"
-                onClick={() => setRepeatCount(Math.min(repeatCount + 1, 5))}
-              >
-                {" "}
-                <PlusIcon />{" "}
-              </Button>
-            </div>
-          </div>
+  // const RepeatControls = () => {
+  //   return (
 
-          <div className="mt-6 flex justify-between">
-            <Button
-              variant={"outline"}
-              onClick={() => setIsRepeatActive(!isRepeatActive)}
-            >
-              {isRepeatActive ? "Disable" : "Enable"}
-            </Button>
-          </div>
-        </PopoverContent>
-      </Popover>
-    );
-  };
+  //   );
+  // };
 
   return (
     <div className="">
       <AudioPlayer
         ref={audioRef}
         autoPlay={false}
-        showJumpControls={false}
+        progressUpdateInterval={50}
         // defaultDuration={<RHAP_UI.DURATION />}
+        preload="none"
         src={src}
-        layout="horizontal"
+        // layout="horizontal"
         className=""
-        customAdditionalControls={[<RepeatControls key={"repeatContKey"} />]}
-        // onPause={() => console.log("Pause clicked")}
-        // onPlay={() => console.log("Play clicked")}
+        customAdditionalControls={[
+          <PopoverComp
+            isPopoverOpen={isPopoverOpen}
+            setIsPopoverOpen={setIsPopoverOpen}
+            isRepeatActive={isRepeatActive}
+            setIsRepeatActive={setIsRepeatActive}
+            repeatCount={repeatCount}
+            setRepeatCount={setRepeatCount}
+            setRepeatModeHandler={setRepeatModeHandler}
+          />,
+        ]}
       />
       {/* <audio
         className="sticky bottom-0 z-20"
@@ -301,6 +268,91 @@ const AudioPlayerComp: React.FC<AudioPlayerProps> = ({ src, chapter }) => {
       ></audio> */}
       {/* <CustomAudioPlayer ref={audioRef} src={src} /> */}
     </div>
+  );
+};
+
+const PopoverComp = ({
+  isPopoverOpen,
+  setIsPopoverOpen,
+  isRepeatActive,
+  repeatCount,
+  setRepeatCount,
+  setRepeatModeHandler,
+  setIsRepeatActive,
+}: {
+  isPopoverOpen: boolean;
+  setIsPopoverOpen: (value: boolean) => void;
+  isRepeatActive: boolean;
+  repeatCount: number;
+  setRepeatCount: (count: number) => void;
+  setRepeatModeHandler: (
+    mode: "verse" | "paragraph" | "range" | "chapter"
+  ) => void;
+  setIsRepeatActive: (value: boolean) => void;
+}) => {
+  return (
+    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+      <PopoverTrigger className="relative">
+        <Repeat color={isRepeatActive ? "black" : "gray"} size={25} />
+        {isRepeatActive && (
+          <span className="absolute bottom-0 -right-2 bg-[#f0eee2] p-2 rounded-full w-4 h-4 flex items-center justify-center">
+            {repeatCount}
+          </span>
+        )}
+      </PopoverTrigger>
+      <PopoverContent className="flex flex-col gap-2">
+        <div className="flex gap-2 items-center justify-between">
+          <p>Repeat each</p>
+          <div className="flex gap-2 items-center">
+            <Button
+              disabled={repeatCount <= 2}
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.preventDefault();
+                setRepeatCount(Math.max(repeatCount - 1, 2));
+              }}
+            >
+              {" "}
+              <MinusIcon />{" "}
+            </Button>
+            <Input
+              id="width"
+              type="number"
+              min={2}
+              value={repeatCount.toString()}
+              className="max-w-fit"
+              onChange={(e) => setRepeatCount(parseInt(e.target.value, 10))}
+            />
+
+            <Button
+              // disabled={repeatCount === 5}
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.preventDefault();
+                setRepeatCount(repeatCount + 1);
+              }}
+            >
+              {" "}
+              <PlusIcon />{" "}
+            </Button>
+          </div>
+        </div>
+
+        <div className="mt-6 flex justify-between">
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              setIsRepeatActive(!isRepeatActive);
+              setIsPopoverOpen(false);
+            }}
+          >
+            {isRepeatActive ? "Disable" : "Enable"}
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 

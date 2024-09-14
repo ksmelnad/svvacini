@@ -17,10 +17,10 @@ const features = [
     href: "/search",
   },
   {
-    item: "AI-Powered Q&A with Sanskrit Texts",
-    desc: "Engage with Sanskrit literature like never before. Ask questions and receive accurate answers, powered by the latest AI models tailored for Sanskrit texts.",
-    src: "/12291062_Wavy_Tech-20_Single-08.svg",
-    href: "/samvadini",
+    item: "Dictionary Look Up",
+    desc: "Access several online Sanskrit dictionaries for better understanding the language and its nuances.",
+    src: "/dictionary2.png",
+    href: "",
   },
   {
     item: "Read in Any Script of Your Choice",
@@ -34,7 +34,7 @@ const Features = () => {
   return (
     <div
       id="features"
-      className="px-4 my-20 py-10 md:py-20 max-w-5xl mx-4 md:mx-auto bg-white/50 rounded-md flex flex-col gap-12 md:gap-20"
+      className="px-4 my-20 py-10 md:py-20 max-w-5xl mx-4 md:mx-auto bg-white/80 rounded-md flex flex-col gap-12 md:gap-20"
     >
       {features.map((feature, index) => (
         <div
