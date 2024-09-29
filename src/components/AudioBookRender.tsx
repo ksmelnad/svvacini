@@ -47,6 +47,7 @@ import {
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import Dictionary from "./Dictionary";
 import { Switch } from "./ui/switch";
+import CustomAudioPlayerTwo from "./CustomAudioPlayerTwo";
 // import CustomAudioPlayerTwo from "./CustomAudioPlayerTwo";
 
 interface AudioBookRenderProps {
@@ -146,11 +147,11 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   );
   const [selectedAudioIndex, setSelectedAudioIndex] = useState("0");
 
-  console.log(
-    "audioUrl",
-    bookData?.chapters[currentChapterIndex].audios[Number(selectedAudioIndex)]
-      .audioUrl
-  );
+  // console.log(
+  //   "audioUrl",
+  //   bookData?.chapters[currentChapterIndex].audios[Number(selectedAudioIndex)]
+  //     .audioUrl
+  // );
 
   const searchParams = useSearchParams();
   const lineId = searchParams.get("lineId");
@@ -438,10 +439,6 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                 }
                 chapter={bookData.chapters[currentChapterIndex]}
               />
-              // <CustomAudioPlayerTwo
-              //   src={bookData.chapters[currentChapterIndex].audio || ""}
-              //   chapter={bookData.chapters[currentChapterIndex]}
-              // />
             )}
           </div>
         </div>
