@@ -44,10 +44,9 @@ import {
   useScriptStore,
   useSelectedTextTimeStore,
 } from "@/utils/useStore";
-import CustomAudioPlayer from "./CustomAudioPlayer";
+// import CustomAudioPlayer from "./CustomAudioPlayer";
 import Dictionary from "./Dictionary";
 import { Switch } from "./ui/switch";
-import CustomAudioPlayerTwo from "./CustomAudioPlayerTwo";
 // import CustomAudioPlayerTwo from "./CustomAudioPlayerTwo";
 
 interface AudioBookRenderProps {
