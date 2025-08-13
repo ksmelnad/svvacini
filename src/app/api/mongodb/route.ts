@@ -1,75 +1,92 @@
 import { NextResponse } from "next/server";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { Document } from "mongodb";
 import clientPromise from "@/utils/db";
+
+interface SearchRequestBody {
+  query?: string;
+}
 
 export async function POST(request: Request) {
   try {
-    const { query } = await request.json();
+    const { query }: SearchRequestBody = await request.json();
+
+    if (!query || typeof query !== "string" || query.trim() === "") {
+      return NextResponse.json(
+        { errorMessage: "Search query is missing or invalid." },
+        { status: 400 }
+      );
+    }
+
     console.log("\n\nQUERY: ", query);
     const client = await clientPromise;
     const collection = client.db("SamskritaVangmaya").collection("Verse");
-    const results = await collection
-      .aggregate([
-        {
-          $search: {
-            text: {
-              query: query,
-              path: "lines.text",
-            },
+    const pipeline: Document[] = [
+      {
+        $search: {
+          index: "default",
+          text: {
+            query: query,
+            path: "lines.text",
+          },
 
-            scoreDetails: true,
-            highlight: {
-              path: "lines.text",
-              //   "maxCharsToExamine": "<number-of-chars-to-examine>", // optional, defaults to 500,000
-              //   "maxNumPassages": "<number-of-passages>" // optional, defaults to 5
-            },
+          scoreDetails: true,
+          highlight: {
+            path: "lines.text",
           },
         },
-        {
-          $lookup: {
-            from: "Chapter", // Replace with your actual chapter collection name
-            localField: "chapterId",
-            foreignField: "_id", // Assuming chapterId in Verse refers to _id in Chapter
-            as: "chapterData",
-          },
+      },
+      {
+        $lookup: {
+          from: "Chapter", // Replace with your actual chapter collection name
+          localField: "chapterId",
+          foreignField: "_id",
+          as: "chapterData",
         },
-        {
-          $lookup: {
-            from: "Book", // Replace with your actual chapter collection name
-            localField: "bookId",
-            foreignField: "_id", // Assuming chapterId in Verse refers to _id in Chapter
-            as: "bookData",
-          },
+      },
+      {
+        $lookup: {
+          from: "Book", // Replace with your actual chapter collection name
+          localField: "bookId",
+          foreignField: "_id",
+          as: "bookData",
         },
+      },
+      {
+        // Use preserveNullAndEmptyArrays to keep documents even if the lookup found no match.
+        // This helps in debugging, as you'll see documents with empty/null chapterData
+        // instead of them disappearing from the result set.
+        $unwind: {
+          path: "$chapterData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: "$bookData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          "lines.text": 1,
+          order: 1,
+          chapterTitle: "$chapterData.title",
+          bookTitle: "$bookData.title",
+          score: { $meta: "searchScore" },
+          highlights: { $meta: "searchHighlights" },
+        },
+      },
+    ];
 
-        {
-          $unwind: "$chapterData", // Unwind the joined chapter data (might be an array)
-        },
-        {
-          $unwind: "$bookData", // Unwind the joined book data (might be an array)
-        },
-        {
-          $project: {
-            _id: 1,
-            "lines.text": 1,
-            order: 1,
-            // chapterId: 1,
-            chapterTitle: "$chapterData.title",
-            // bookId: "$chapterData.bookId",
-            bookTitle: "$bookData.title",
-            score: { $meta: "searchScore" },
-            highlights: { $meta: "searchHighlights" },
-          },
-        },
-      ])
-      .toArray();
+    const results = await collection.aggregate(pipeline).toArray();
 
-    // const results = await collection.find({ order: query }).toArray();
-    // console.log(results);
-    // process.exit(0); // Exit process with success code (0)
+    console.log(results);
     return NextResponse.json(results);
-  } catch (error: any) {
-    console.log("\n\nERROR-------\n", error);
-    return NextResponse.json({ errorMessage: error });
+  } catch (error) {
+    console.error("\n\nERROR-------\n", error);
+    const message =
+      error instanceof Error ? error.message : "An unknown error occurred.";
+    return NextResponse.json({ errorMessage: message }, { status: 500 });
   }
 }

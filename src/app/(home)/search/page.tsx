@@ -1,13 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sanscript from "@/utils/sanscript";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import dynamic from "next/dynamic";
 
 import {
   Select,
@@ -19,6 +16,7 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { Transliterate } from "@/components/Transliterate";
 
 interface Docs {
   id: string;
@@ -28,14 +26,6 @@ interface Docs {
   line_id: string;
   _version_: number;
 }
-
-const IndicTransliterate = dynamic(
-  () =>
-    import("@ai4bharat/indic-transliterate").then(
-      (mod) => mod.IndicTransliterate
-    ),
-  { ssr: false }
-);
 
 function Search() {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -493,16 +483,13 @@ function Search() {
           <form onSubmit={onSubmitHandler} className="flex flex-col gap-2">
             {isAiBharat ? (
               <div className="py-4">
-                <IndicTransliterate
-                  // className={styles.searchinput}
-                  renderComponent={(props) => <Input {...props} />}
-                  // className="my-4"
+                <Transliterate
+                  lang="sa"
                   value={queryString}
-                  placeholder="पृच्छा (Query)"
+                  // placeholder="पृच्छा (Query)"
                   onChangeText={(text) => {
                     setQueryString(text);
                   }}
-                  lang="sa"
                 />
               </div>
             ) : (
