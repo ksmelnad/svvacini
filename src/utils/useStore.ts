@@ -21,6 +21,12 @@ interface DictionaryState {
   setIsDictionaryActive: (isDictionaryActive: boolean) => void;
 }
 
+interface RepeatState {
+  repeatItems: { [id: string]: number };
+  setRepeatCount: (id: string, count: number) => void;
+  clearRepeat: (id: string) => void;
+}
+
 export const useScriptStore = create<ScriptState>((set) => ({
   script: "devanagari", // default script
   setScript: (script) => set({ script }),
@@ -40,5 +46,20 @@ export const useCurrentTimeStore = create<CurrentTimeState>((set) => ({
 
 export const useDictionaryStore = create<DictionaryState>((set) => ({
   isDictionaryActive: false,
-  setIsDictionaryActive: (isDictionaryActive) => set({ isDictionaryActive }),
+  setIsDictionaryActive: (isDictionaryActive: boolean) =>
+    set({ isDictionaryActive }),
+}));
+
+export const useRepeatStore = create<RepeatState>((set) => ({
+  repeatItems: {},
+  setRepeatCount: (id, count) =>
+    set((state) => ({
+      repeatItems: { ...state.repeatItems, [id]: count },
+    })),
+  clearRepeat: (id) =>
+    set((state) => {
+      const newItems = { ...state.repeatItems };
+      delete newItems[id];
+      return { repeatItems: newItems };
+    }),
 }));

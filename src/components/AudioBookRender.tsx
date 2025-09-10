@@ -40,6 +40,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import {
+  useCurrentTimeStore,
   useDictionaryStore,
   useScriptStore,
   useSelectedTextTimeStore,
@@ -158,6 +159,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
   const { script, setScript } = useScriptStore();
   const { selectedTextTime, setSelectedTextTime } = useSelectedTextTimeStore();
   const { isDictionaryActive, setIsDictionaryActive } = useDictionaryStore();
+  const { setCurrentTime } = useCurrentTimeStore();
 
   // console.log(script);
   // console.log("BookData: ", bookData);
@@ -175,8 +177,10 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
       const chapter = bookData?.chapters[currentChapterIndex];
       const audioData = chapter?.audios;
       setAudioData(audioData);
+      // Reset current time when chapter changes
+      setCurrentTime(0);
     }
-  }, [currentChapterIndex, bookData]);
+  }, [currentChapterIndex, bookData, setCurrentTime]);
 
   //   console.log(currentTime);
   //   console.log("Content type:", typeof content);
@@ -193,11 +197,13 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
 
   const handleNextButton = () => {
     setSelectedTextTime(0);
+    setCurrentTime(0);
     setCurrentChapterIndex((prev) => prev + 1);
   };
 
   const handlePreviousButton = () => {
     setSelectedTextTime(0);
+    setCurrentTime(0);
     setCurrentChapterIndex((prev) => prev - 1);
   };
 
@@ -262,6 +268,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                                   }`}
                                 onClick={() => {
                                   setSelectedTextTime(0);
+                                  setCurrentTime(0);
                                   setCurrentChapterIndex(chIndex);
 
                                   // setSidebarActive(false);
@@ -281,6 +288,7 @@ const AudioBookRender: React.FC<AudioBookRenderProps> = ({ bookData }) => {
                                       className="text-sm hover:text-red-700 transition-colors"
                                       onClick={() => {
                                         setSelectedTextTime(0);
+                                        setCurrentTime(0);
                                         setCurrentChapterIndex(chIndex);
 
                                         // setSidebarActive(false);

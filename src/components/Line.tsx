@@ -8,9 +8,6 @@ import {
 import { Line as LineType } from "@prisma/client";
 import React, { useEffect, useMemo } from "react";
 import Sanscript from "@/utils/sanscript";
-import { Popover, PopoverTrigger } from "./ui/popover";
-import { PopoverContent } from "@radix-ui/react-popover";
-import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -72,7 +69,7 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
   return (
     <div>
       {isDictionaryActive ? (
-        <div className="ml-2 md:ml-4 lg:text-lg ">
+        <div className="ml-2 md:ml-4 lg:text-lg">
           {formattedText.map((text, textIdx) => {
             return text
               .split(/\s+/)
@@ -89,7 +86,7 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
           id={lineId}
           key={index}
           ref={lineRef}
-          className={`ml-2 md:ml-4 cursor-pointer flex flex-col ${
+          className={`ml-2 md:ml-4 cursor-pointer ${
             isActive ? " text-xl text-red-700" : " lg:text-lg"
           }`}
           onClick={handleLineClick}
@@ -97,6 +94,7 @@ const Line = ({ lineId, line, index, lineRef }: LineProps) => {
           {formattedText.map((text, idx) => (
             <span key={idx} className="">
               {text}
+              <br />
             </span>
           ))}
         </p>
